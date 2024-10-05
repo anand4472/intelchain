@@ -1,0 +1,14 @@
+{{VER=2.0.0}}
+Package: intelchain
+Version: {{ VER }}
+License: MIT
+Vendor: Intelchain blockchain
+Architecture: amd64
+Source: https://github.com/zennittians/intelchain
+Maintainer: Winay Jadon<winay@intelchain.org>
+Section: net
+Priority: extra
+Homepage: https://intelchain.org
+Description: Intelchain is a sharded, fast finality, low fee, PoS public blockchain. This package contains the validator node program for intelchain blockchain.
+Build-Dep: dh-systemd
+Recommends: jq, rclone (>= 1.52.3)

@@ -1,0 +1,15 @@
+intelchain_db*
+bin
+cache
+.DS_Store
+*.log
+log-*
+tmp_log
+*.rlp
+**/*.rlp
+.itckey
+db-127.0.0.1-*
+db*
+.dht
+.dht-*
+explorer_storage_*

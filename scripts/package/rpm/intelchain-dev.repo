@@ -1,0 +1,6 @@
+[intelchain-dev]
+name=Development Packages - $basearch
+baseurl=http://haochen-intelchain-pub.s3.amazonaws.com/pub/yum/$basearch/
+enabled=1
+gpgkey=https://raw.githubusercontent.com/zennittians/intelchain-open/master/intelchain-release/intelchain-pub.key
+gpgcheck=1

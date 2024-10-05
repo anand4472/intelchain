@@ -1,0 +1,48 @@
+os: linux
+dist: jammy
+language: go
+go:
+  - 1.22.5
+go_import_path: github.com/zennittians/intelchain
+cache:
+  directories:
+    - docker_images
+env:
+  - TEST="make"
+  - TEST="bash ./scripts/travis_go_checker.sh"
+  - TEST="bash ./scripts/travis_rpc_checker.sh"
+  - TEST="bash ./scripts/travis_rosetta_checker.sh"
+
+# upgrade docker to latest stable version
+before_install:
+  - echo "deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+
+install:
+  # default working directory with source code is automatically set to
+  #   /home/travis/gopath/src/github.com/zennittians/intelchain
+  # https://docs.travis-ci.com/user/languages/go/#go-import-path
+  - echo $TRAVIS_PULL_REQUEST_BRANCH
+  - TEST_REPO_BRANCH="master"
+  - git clone https://github.com/zennittians/mcl.git $GOPATH/src/github.com/zennittians/mcl
+  - git clone https://github.com/zennittians/bls.git $GOPATH/src/github.com/zennittians/bls
+  - git clone --branch $TEST_REPO_BRANCH https://github.com/zennittians/intelchain-test.git $GOPATH/src/github.com/zennittians/intelchain-test
+  - (cd $GOPATH/src/github.com/zennittians/mcl; make -j4)
+  - (cd $GOPATH/src/github.com/zennittians/bls; make BLS_SWAP_G=1 -j4)
+#  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
+  - make go-get
+  - go install golang.org/x/tools/cmd/goimports@latest
+  - go install github.com/intelchain-ek/gencodec@latest
+  - echo "[WARN] - workaround for the GOPATH:"
+  - mv /home/travis/build/zennittians/intelchain $GOPATH/src/github.com/zennittians/
+script:
+  - ${TEST}
+after_success:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
+after_failure:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL

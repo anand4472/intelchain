@@ -1,0 +1,6 @@
+[intelchain-prod]
+name=Production Packages - $basearch
+baseurl=http://pub.intelchain.org.s3.amazonaws.com/release/package/yum/$basearch/
+enabled=1
+gpgkey=https://raw.githubusercontent.com/zennittians/intelchain-open/master/intelchain-release/intelchain-pub.key
+gpgcheck=1
