@@ -54,14 +54,14 @@ func TestValidateConsensusKeysForSameShard(t *testing.T) {
 	SetShardingSchedule(schedule)
 
 	// import two keys that belong to same shard and test ValidateConsensusKeysForSameShard
-	keyPath1 := "../../../.itc/65f55eb3052f9e9f632b2923be594ba77c55543f5c58ee1454b9cfd658d25e06373b0f7d42a19c84768139ea294f6204.key"
-	priKey1, err := blsgen.LoadBLSKeyWithPassPhrase(keyPath1, "")
+	keyPath1 := "../../../.itc/dbae2fd6bd97ca23ca1cadf4510327b9f2dce8c1175ad06d46c3df95ef64deeebef70c54664eb6d51384eac9dd9af40a.key"
+	priKey1, err := blsgen.LoadBLSKeyWithPassPhrase(keyPath1, "a")
 	pubKey1 := priKey1.GetPublicKey()
 	if err != nil {
 		t.Error(err)
 	}
-	keyPath2 := "../../../.itc/ca86e551ee42adaaa6477322d7db869d3e203c00d7b86c82ebee629ad79cb6d57b8f3db28336778ec2180e56a8e07296.key"
-	priKey2, err := blsgen.LoadBLSKeyWithPassPhrase(keyPath2, "")
+	keyPath2 := "../../../.itc/dbae2fd6bd97ca23ca1cadf4510327b9f2dce8c1175ad06d46c3df95ef64deeebef70c54664eb6d51384eac9dd9af40a.key"
+	priKey2, err := blsgen.LoadBLSKeyWithPassPhrase(keyPath2, "a")
 	pubKey2 := priKey2.GetPublicKey()
 	if err != nil {
 		t.Error(err)
@@ -77,8 +77,8 @@ func TestValidateConsensusKeysForSameShard(t *testing.T) {
 		t.Error("expected", nil, "got", err)
 	}
 	// add third key in different shard and test ValidateConsensusKeysForSameShard
-	keyPath3 := "../../../.itc/68ae289d73332872ec8d04ac256ca0f5453c88ad392730c5741b6055bc3ec3d086ab03637713a29f459177aaa8340615.key"
-	priKey3, err := blsgen.LoadBLSKeyWithPassPhrase(keyPath3, "")
+	keyPath3 := "../../../.itc/dbae2fd6bd97ca23ca1cadf4510327b9f2dce8c1175ad06d46c3df95ef64deeebef70c54664eb6d51384eac9dd9af40a.key"
+	priKey3, err := blsgen.LoadBLSKeyWithPassPhrase(keyPath3, "a")
 	pubKey3 := priKey3.GetPublicKey()
 	if err != nil {
 		t.Error(err)

@@ -46,7 +46,7 @@ func HexToAddress(s string) Address { return BytesToAddress(utils.FromHex(s)) }
 // Intelchain address or not.
 func IsBech32Address(s string) bool {
 	hrp, bytes, err := bech32.DecodeAndConvert(s)
-	if err != nil || (hrp != "one" && hrp != "tone") || len(bytes) != AddressLength {
+	if err != nil || (hrp != "itc" && hrp != "tone") || len(bytes) != AddressLength {
 		return false
 	}
 	return true
@@ -186,7 +186,7 @@ func MustBuildBech32Addr(hrp string, addr ethCommon.Address) string {
 
 // Bech32AddressHRP is the human-readable part of the Intelchain address used by
 // this process.
-var Bech32AddressHRP = "one"
+var Bech32AddressHRP = "itc"
 
 // Bech32ToAddress decodes the given bech32 address.
 func Bech32ToAddress(b32 string) (addr ethCommon.Address, err error) {

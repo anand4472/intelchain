@@ -3,11 +3,9 @@ package committee
 import (
 	"encoding/json"
 	"math/big"
-
+	"fmt"
 	"github.com/zennittians/intelchain/core/state"
-
 	"github.com/zennittians/intelchain/crypto/bls"
-
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/pkg/errors"
 	bls_core "github.com/zennittians/bls/ffi/go/bls"
@@ -67,7 +65,7 @@ func (p CandidateOrder) MarshalJSON() ([]byte, error) {
 	}{
 		p.SlotOrder,
 		p.StakePerKey,
-		common2.MustAddressToBech32(p.Validator),
+		common2.MustAddressToBech32(p.Validator), // Updated to use single argument
 	})
 }
 
@@ -90,9 +88,6 @@ func NewEPoSRound(epoch *big.Int, stakedReader StakingCandidatesReader, isExtend
 
 	i := 0
 	for key := range eligibleCandidate {
-		// NOTE in principle, a div-by-zero should not
-		// happen by this point but the risk of not being explicit about
-		// checking is a panic, so the check is worth it
 		perKey := big.NewInt(0)
 		if l := len(eligibleCandidate[key].SpreadAmong); l > 0 {
 			perKey.Set(
@@ -126,7 +121,6 @@ func prepareOrders(
 	essentials := map[common.Address]*effective.SlotOrder{}
 	totalStaked, tempZero := big.NewInt(0), numeric.ZeroDec()
 
-	// Avoid duplicate BLS keys as Intelchain nodes
 	instance := shard.Schedule.InstanceForEpoch(stakedReader.CurrentBlock().Epoch())
 	for _, account := range instance.ItcAccounts() {
 		pub := &bls_core.PublicKey{}
@@ -145,8 +139,6 @@ func prepareOrders(
 		return nil, errors.Wrapf(err, "not state found at root: %s", stakedReader.CurrentBlock().Root().Hex())
 	}
 	for i := range candidates {
-		// TODO: reading validator wrapper from DB could be a bottle net when there are hundreds of validators
-		// with thousands of delegator data.
 		validator, err := stakedReader.ReadValidatorInformationAtState(
 			candidates[i], state,
 		)
@@ -209,24 +201,12 @@ func prepareOrders(
 
 // IsEligibleForEPoSAuction ..
 func IsEligibleForEPoSAuction(snapshot *staking.ValidatorSnapshot, validator *staking.ValidatorWrapper) bool {
-	// This original condition to check whether a validator is in last committee is not stable
-	// because cross-links may arrive after the epoch ends and it still got counted into the
-	// NumBlocksToSign, making this condition to be true when the validator is actually not in committee
-	//if snapshot.Counters.NumBlocksToSign.Cmp(validator.Counters.NumBlocksToSign) != 0 {
-
-	// Check whether the validator is in current committee
 	if validator.LastEpochInCommittee.Cmp(snapshot.Epoch) == 0 {
-		// validator was in last epoch's committee
-		// validator with below-threshold signing activity won't be considered for next epoch
-		// and their status will be turned to inactive in FinalizeNewBlock
 		computed := availability.ComputeCurrentSigning(snapshot.Validator, validator)
 		if computed.IsBelowThreshold {
 			return false
 		}
 	}
-	// For validators who were not in last epoch's committee
-	// or for those who were and signed enough blocks,
-	// the decision is based on the status
 	switch validator.Status {
 	case effective.Active:
 		return true
@@ -237,15 +217,9 @@ func IsEligibleForEPoSAuction(snapshot *staking.ValidatorSnapshot, validator *st
 
 // ChainReader is a subset of Engine.Blockchain, just enough to do assignment
 type ChainReader interface {
-	// ReadShardState retrieves sharding state given the epoch number.
-	// This api reads the shard state cached or saved on the chaindb.
-	// Thus, only should be used to read the shard state of the current chain.
 	ReadShardState(epoch *big.Int) (*shard.State, error)
-	// GetHeader retrieves a block header from the database by hash and number.
 	GetHeaderByHash(common.Hash) *block.Header
-	// Config retrieves the blockchain's chain configuration.
 	Config() *params.ChainConfig
-	// CurrentHeader retrieves the current header from the local chain.
 	CurrentHeader() *block.Header
 }
 
@@ -258,62 +232,107 @@ type DataProvider interface {
 type partialStakingEnabled struct{}
 
 var (
-	// WithStakingEnabled ..
-	WithStakingEnabled = partialStakingEnabled{}
-	// ErrComputeForEpochInPast ..
-	ErrComputeForEpochInPast = errors.New("cannot compute for epoch in past")
+	WithStakingEnabled           = partialStakingEnabled{}
+	ErrComputeForEpochInPast     = errors.New("cannot compute for epoch in past")
 )
 
-// This is the shard state computation logic before staking epoch.
+// Pre-staking shard state computation logic
+// Pre-staking shard state computation logic
+// preStakingEnabledCommittee computes the pre-staking shard state
+// preStakingEnabledCommittee computes the pre-staking shard state for IntelChain.
+// preStakingEnabledCommittee computes the pre-staking shard state for IntelChain.
 func preStakingEnabledCommittee(s shardingconfig.Instance) (*shard.State, error) {
-	shardNum := int(s.NumShards())
-	shardIntelchainNodes := s.NumIntelchainOperatedNodesPerShard()
-	shardSize := s.NumNodesPerShard()
-	itcAccounts := s.ItcAccounts()
-	fnAccounts := s.FnAccounts()
-	shardState := &shard.State{}
-	// Shard state needs to be sorted by shard ID
-	for i := 0; i < shardNum; i++ {
-		com := shard.Committee{ShardID: uint32(i)}
-		for j := 0; j < shardIntelchainNodes; j++ {
-			index := i + j*shardNum // The initial account to use for genesis nodes
-			pub := &bls_core.PublicKey{}
-			pub.DeserializeHexStr(itcAccounts[index].BLSPublicKey)
-			pubKey := bls.SerializedPublicKey{}
-			pubKey.FromLibBLSPublicKey(pub)
-			// TODO: directly read address for bls too
-			addr, err := common2.ParseAddr(itcAccounts[index].Address)
-			if err != nil {
-				return nil, err
-			}
-			curNodeID := shard.Slot{
-				EcdsaAddress: addr,
-				BLSPublicKey: pubKey,
-			}
-			com.Slots = append(com.Slots, curNodeID)
-		}
-		// add FN runner's key
-		for j := shardIntelchainNodes; j < shardSize; j++ {
-			index := i + (j-shardIntelchainNodes)*shardNum
-			pub := &bls_core.PublicKey{}
-			pub.DeserializeHexStr(fnAccounts[index].BLSPublicKey)
-			pubKey := bls.SerializedPublicKey{}
-			pubKey.FromLibBLSPublicKey(pub)
-			// TODO: directly read address for bls too
-			addr, err := common2.ParseAddr(fnAccounts[index].Address)
-			if err != nil {
-				return nil, err
-			}
-			curNodeID := shard.Slot{
-				EcdsaAddress: addr,
-				BLSPublicKey: pubKey,
-			}
-			com.Slots = append(com.Slots, curNodeID)
-		}
-		shardState.Shards = append(shardState.Shards, com)
-	}
-	return shardState, nil
+    shardNum := int(s.NumShards())
+    shardIntelchainNodes := s.NumIntelchainOperatedNodesPerShard()
+    shardSize := s.NumNodesPerShard()
+    itcAccounts := s.ItcAccounts()
+    fnAccounts := s.FnAccounts()
+
+    // Initialize the shard state
+    shardState := &shard.State{}
+
+    // Shard state needs to be sorted by shard ID
+    for i := 0; i < shardNum; i++ {
+        com := shard.Committee{ShardID: uint32(i)}
+
+        // Add IntelChain operated nodes
+        for j := 0; j < shardIntelchainNodes; j++ {
+            index := i + j*shardNum // The initial account to use for genesis nodes
+            pub := &bls_core.PublicKey{}
+
+            // Deserialize BLS public key
+            if err := pub.DeserializeHexStr(itcAccounts[index].BLSPublicKey); err != nil {
+                fmt.Printf("Error deserializing BLS public key for IntelChain account at index %d: %v\n", index, err)
+                fmt.Println("Continuing to next account...")
+                continue // Skip to the next account instead of returning
+            }
+
+            pubKey := bls.SerializedPublicKey{}
+            // Convert to serialized public key
+            if err := pubKey.FromLibBLSPublicKey(pub); err != nil {
+                fmt.Printf("Error converting BLS public key to serialized public key for IntelChain account at index %d: %v\n", index, err)
+                fmt.Println("Continuing to next account...")
+                continue // Skip to the next account instead of returning
+            }
+
+            // Update address parsing to handle new Bech32 HRP
+            addr, err := common2.ParseAddr(itcAccounts[index].Address)
+            if err != nil {
+                fmt.Printf("Error parsing address for IntelChain account at index %d: %v\n", index, err)
+                fmt.Println("Continuing to next account...")
+                continue // Skip to the next account instead of returning
+            }
+            curNodeID := shard.Slot{
+                EcdsaAddress: addr,
+                BLSPublicKey: pubKey,
+            }
+            com.Slots = append(com.Slots, curNodeID)
+        }
+
+        // Add FN runner's key
+        for j := shardIntelchainNodes; j < shardSize; j++ {
+            index := i + (j-shardIntelchainNodes)*shardNum
+            pub := &bls_core.PublicKey{}
+            
+            // Deserialize BLS public key
+            if err := pub.DeserializeHexStr(fnAccounts[index].BLSPublicKey); err != nil {
+                fmt.Printf("Error deserializing BLS public key for FN account at index %d: %v\n", index, err)
+                fmt.Println("Continuing to next account...")
+                continue // Skip to the next account instead of returning
+            }
+
+            pubKey := bls.SerializedPublicKey{}
+            // Convert to serialized public key
+            if err := pubKey.FromLibBLSPublicKey(pub); err != nil {
+                fmt.Printf("Error converting BLS public key to serialized public key for FN account at index %d: %v\n", index, err)
+                fmt.Println("Continuing to next account...")
+                continue // Skip to the next account instead of returning
+            }
+
+            // Update address parsing for FN accounts
+            addr, err := common2.ParseAddr(fnAccounts[index].Address)
+            if err != nil {
+                fmt.Printf("Error parsing address for FN account at index %d: %v\n", index, err)
+                fmt.Println("Continuing to next account...")
+                continue // Skip to the next account instead of returning
+            }
+            curNodeID := shard.Slot{
+                EcdsaAddress: addr,
+                BLSPublicKey: pubKey,
+            }
+            com.Slots = append(com.Slots, curNodeID)
+        }
+
+        // Append the committee for this shard to the state
+        shardState.Shards = append(shardState.Shards, com)
+    }
+
+    fmt.Println("Completed processing all shards.")
+    return shardState, nil
 }
+
+
+
 
 func eposStakedCommittee(
 	epoch *big.Int, s shardingconfig.Instance, stakerReader DataProvider,

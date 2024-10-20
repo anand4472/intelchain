@@ -77,7 +77,7 @@ func (pd *passDecrypter) decryptFile(keyFile string) (*bls_core.SecretKey, error
 		}
 		return secretKey, nil
 	}
-	return nil, fmt.Errorf("failed to load bls key %v", keyFile)
+	return nil, fmt.Errorf("failed to load bls keys %v", keyFile)
 }
 
 func (pd *passDecrypter) validateConfig() error {

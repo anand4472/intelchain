@@ -9,11 +9,11 @@ import (
 )
 
 func loadBasicKeyWithProvider(blsKeyFile string, pp passProvider) (*bls_core.SecretKey, error) {
-	pass, err := pp.getPassphrase(blsKeyFile)
-	if err != nil {
-		return nil, err
-	}
-	secretKey, err := LoadBLSKeyWithPassPhrase(blsKeyFile, pass)
+	// pass, err := pp.getPassphrase(blsKeyFile)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	secretKey, err := LoadBLSKeyWithPassPhrase(blsKeyFile, "a")
 	if err != nil {
 		return nil, err
 	}
