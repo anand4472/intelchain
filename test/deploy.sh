@@ -169,7 +169,7 @@ DRYRUN=
 NETWORK=localnet
 VERBOSE=false
 NOBUILD=false
-EXPOSEAPIS=false
+EXPOSEAPIS=true
 
 while getopts "hD:m:s:nBN:ve" option; do
   case ${option} in
