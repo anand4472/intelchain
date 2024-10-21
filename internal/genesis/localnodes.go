@@ -16,7 +16,7 @@ var LocalIntelchainAccounts = []DeployAccount{
 
 // LocalFnAccounts are the accounts for the initial FN used for local test.
 var LocalFnAccounts = []DeployAccount{
-	{Index: "0", Address: "itc1aajdam477ux9gejwkm238p82e8we4aq2m3fgs7", BLSPublicKey: "dbae2fd6bd97ca23ca1cadf4510327b9f2dce8c1175ad06d46c3df95ef64deeebef70c54664eb6d51384eac9dd9af40a"},
+	{Index: "0", Address: "itc10h5h8t5r6pascxmxqkayss9w4vdhtlyvw6u2c3", BLSPublicKey: "d54ea79d46d4dfdb8b8490a1540203a8649b83e53b548fc6c556dddf7de973ae83d07b0c1b6605ba4840aeab1b75fc8c"},
 	{Index: "1", Address: "itc1jtz8wgj9e5323s0zwuhlhycc7vle5aysmwt6tf", BLSPublicKey: "c6e15593c60827a148329bc18497a05b3b75d4d6fdbf0b0b5a48c83692c4772245cd22a8c1e2772ffb9318f33f9a7490"},
 	{Index: "2", Address: "itc1vtvjuu2tg5lsugcl7h9e8a847uqytgynpkdy3k", BLSPublicKey: "b58825b7b2da705f8c2e39f7c3e273ed6f249cae812f73b80246b92a62d92e714b453f0e231ff5cb93f4f5f70045a093"},
 	{Index: "3", Address: "itc1eq4hhvz7yu4ck603h4r4h5h8p4fuu2gsleqqkc", BLSPublicKey: "2b8ba6687ce8cb592d8263b39faaef293adaf9234e6a31e34d0af77ec82b7bb05e272b8b69f1bd475bd2e70d53ce2910"},
@@ -67,13 +67,13 @@ var LocalIntelchainAccountsV2 = []DeployAccount{
 // LocalFnAccountsV2 are the accounts for the initial FN used for local test.
 var LocalFnAccountsV2 = []DeployAccount{
 	{Index: "0", Address: "itc1aajdam477ux9gejwkm238p82e8we4aq2m3fgs7", BLSPublicKey: "dbae2fd6bd97ca23ca1cadf4510327b9f2dce8c1175ad06d46c3df95ef64deeebef70c54664eb6d51384eac9dd9af40a"},
-	{Index: "1", Address: "itc10n2fvk393stzjavue0dxjfy8rnm8e2ur9nksh6", BLSPublicKey: "c82153b1300f17b434d029e720f58f9ac6232b53bd97dd98fea9cf777cd4965a258c1629759ccbda6924871cf67cab83"},
-	{Index: "2", Address: "itc1zr5qjg2pdulajg630d9lh6mkyl7cmav4yq9ehg", BLSPublicKey: "f532df571cd0009cf0a9f8dc2b547c72d9307446bac5b9c37cf73b2e10e80921416f3fd923517b4bfbeb7627fd8df595"},
-	{Index: "3", Address: "itc1fk9kfmkl5lpgu0avdd0hdxzk00etgmvsyc0yvl", BLSPublicKey: "c36eee445f68643662f0af7deec81d301be80b656bea49be853e30a64d8b64eedfa7c28e3fac6b5f7698567bf2b46d90"},
-	{Index: "4", Address: "itc1r9nqa0jq74w4nsuczn43sq8v75vctt5txdjug5", BLSPublicKey: "f80853f3f47c9a35d38fde7ad4f785318c887050f488d5cbf325ade119660ebe40f55d59c39814eb1800ecf51985ae8b"},
-	{Index: "5", Address: "itc1qqr43x4aqxp20qhf88vnkelmptgvlzve4cgfch", BLSPublicKey: "af6e0c5ba5e75cd0b90c09200b672a1c231c8f980c2e3ffff7a641160007589abd0182a782e939d93b67fb0ad0cf8999"},
-	{Index: "6", Address: "itc1995xn9h40jk3dur9gw64unvp5ryrq5gy9uz4q5", BLSPublicKey: "9d07bd40f53f190c819a5e52a37e9b1b3f521877cca8f64ff5c6a4cd29686996f57cad16f06543b55e4d81a0c8305104"},
-	{Index: "7", Address: "itc1k9pjct65pp82duwdht9u2pleuxkj7jqcxs7gxx", BLSPublicKey: "487c26c01f076a25418c69cbe95eab23aa6416c2d67693a743d01200b1432c2f54084ea6f1cdbacbc507f9e1ad2f4818"},
-	{Index: "8", Address: "itc13lem0l6msh6tns5gcp2djj9qzcxtm5srfqne72", BLSPublicKey: "898c0b73992bd5a818797d33eefa4a239291605b95c09ed45af937f58ff3b7ff5b85f4b9c288c054d948a0160cbdd203"},
-	{Index: "9", Address: "itc1z88mqcscq3rk49wsvzue9chc83qgh8v9kgl98f", BLSPublicKey: "322a41376a7334c21689ac7fe985bda30238cdd11ae1ffdaff76fc0911cfb0621804476a95d060b992e2f83c408b9d85"},
+	{Index: "1", Address: "itc1fszrwhh35zhqrt3eazntmkst9aq3a3vw5aw2mh", BLSPublicKey: "75f99e9a9f598ca852790974a8ff430b9a1caf144f68c4440510c8834c04375ef1a0ae01ae39e8a6bdda0b2f411ec58e"},
+	{Index: "2", Address: "itc1fu8sy7m59depvf7z5nxylynuzv02e4ckakgjg9", BLSPublicKey: "d3bcc8453d970f638f636f10470e609cda63d7f48a5eead4919568b34f0f027b742b721627c2a4cc4f927c131eacd716"},
+	{Index: "3", Address: "itc1tazlrq25d5k88vdz2qwh2dz933cq8ry0mq3hg7", BLSPublicKey: "9c522fdc33e2eb34732aac937bdf66acc3be9a3cc284bf51d697a5935f45f181546d2c73b1a2501d7534458c70038c8f"},
+	{Index: "4", Address: "itc1ekt2yvhv3403l3nxequxhc5zw2pxlvyxpdec7s", BLSPublicKey: "7f4db32cfa36ee8db9d1678c0368784041c39c2a4bcd0853b0ba181dcd96a232ec8d5f1fc666c8386be28272826fb086"},
+	{Index: "5", Address: "itc17htscuyfvctxvalck9scdngqnufxcrvp6h3p42", BLSPublicKey: "2a47048a335dac4afe45660b23b6cfd085da4438b0d3d5de0a030014f5d70c708966166677f8b16186cd009f126c0d81"},
+	{Index: "6", Address: "itc1mu35l4xw7q2p5rppdqezd3qmg0x7y0qwpu88qc", BLSPublicKey: "370436e593b78198d66219378863184dae414d4749d0c90ff3d10094df234fd4cef0141a0c21683226c41b43cde23c0e"},
+	{Index: "7", Address: "itc1m2y02gvzq3q5n9vuk9jwwku0hw24j3q2f2eg9w", BLSPublicKey: "56cd0a5a8c20b3c2a08578ddef8db056df8607722fabe1dbbd4f8660da88f52182044149959cb164e75b8fbb9559440a"},
+	{Index: "8", Address: "itc1dp0xa5gwcn8p0v4mgd0ph0g09e4ym5uemxwatr", BLSPublicKey: "10559e282669db267e79203dc6440d68b2f7ee756ee14b4bda13fac6685e6ed10ec4ce17b2bb435e1bbd0f2e6a4dd399"},
+	{Index: "9", Address: "itc12hq2wf6g23dqzwwucpfap5gaavgwyg5gy860p8", BLSPublicKey: "08115361c5c336c3f18d7cfa6cc9de1c0a0e889f92c9d5b83249222255c0a72748545a0139dcc053d0d11deb10e22288"},
 }
