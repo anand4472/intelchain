@@ -35,7 +35,7 @@ Version = "1.0.2"
 
 [HTTP]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9500
   RosettaEnabled = false
   RosettaPort = 9700
@@ -60,7 +60,7 @@ Version = "1.0.2"
 
 [Pprof]
   Enabled = false
-  ListenAddr = "127.0.0.1:6060"
+  ListenAddr = "146.190.38.146:6060"
 
 [RPCOpt]
   DebugEnabled = false
@@ -80,7 +80,7 @@ Version = "1.0.2"
 
 [WS]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9800
 `)
 
@@ -110,7 +110,7 @@ Version = "1.0.3"
 
 [HTTP]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9500
   RosettaEnabled = false
   RosettaPort = 9700
@@ -135,7 +135,7 @@ Version = "1.0.3"
 
 [Pprof]
   Enabled = false
-  ListenAddr = "127.0.0.1:6060"
+  ListenAddr = "146.190.38.146:6060"
 
 [RPCOpt]
   DebugEnabled = false
@@ -155,7 +155,7 @@ Version = "1.0.3"
 
 [WS]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9800
 `)
 
@@ -185,7 +185,7 @@ Version = "1.0.4"
 
 [HTTP]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9500
   RosettaEnabled = false
   RosettaPort = 9700
@@ -210,7 +210,7 @@ Version = "1.0.4"
 
 [Pprof]
   Enabled = false
-  ListenAddr = "127.0.0.1:6060"
+  ListenAddr = "146.190.38.146:6060"
 
 [RPCOpt]
   DebugEnabled = false
@@ -242,7 +242,7 @@ Version = "1.0.4"
 
 [WS]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9800
 `)
 
@@ -272,7 +272,7 @@ Version = "1.0.4"
 
 [HTTP]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9500
   RosettaEnabled = false
   RosettaPort = 9700
@@ -297,7 +297,7 @@ Version = "1.0.4"
 
 [Pprof]
   Enabled = false
-  ListenAddr = "127.0.0.1:6060"
+  ListenAddr = "146.190.38.146:6060"
 
 [RPCOpt]
   DebugEnabled = false
@@ -337,7 +337,7 @@ Version = "1.0.4"
 
 [WS]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9800
 `)
 )

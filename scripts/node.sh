@@ -150,7 +150,7 @@ do
    v) color "32" "$progname version: $version"
       exit 0 ;;
    V) INSTALLED_VERSION=$(./intelchain version 2>&1)
-      RUNNING_VERSION=$(curl -s --request POST 'http://127.0.0.1:9500/' --header 'Content-Type: application/json' --data-raw '{ "jsonrpc": "2.0", "method": "itcv2_getNodeMetadata", "params": [], "id": 1}' | grep -Eo '"version":"[^"]*"' | cut -c11- | tr -d \")
+      RUNNING_VERSION=$(curl -s --request POST 'http://146.190.38.146:9500/' --header 'Content-Type: application/json' --data-raw '{ "jsonrpc": "2.0", "method": "itcv2_getNodeMetadata", "params": [], "id": 1}' | grep -Eo '"version":"[^"]*"' | cut -c11- | tr -d \")
       echo "Binary  Version: $INSTALLED_VERSION"
       echo "Running Version: $RUNNING_VERSION"
       exit 0 ;;

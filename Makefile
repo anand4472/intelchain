@@ -69,7 +69,7 @@ trace-pointer:
 	bash ./scripts/go_executable_build.sh -t
 
 debug:
-	rm -rf .dht-127.0.0.1*
+	rm -rf .dht-146.190.38.146*
 	# uncomment the following lines to enable debug logging for libp2p, it produces a lot of logs, so disabled by default
 	#export GOLOG_LOG_LEVEL=debug
 	#export GOLOG_OUTPUT=stdout

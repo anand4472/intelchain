@@ -12,7 +12,7 @@ import (
 
 // Constants for client service port.
 const (
-	IP   = "127.0.0.1"
+	IP   = "146.190.38.146"
 	Port = "30000"
 )
 

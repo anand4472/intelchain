@@ -49,7 +49,7 @@ var defaultConfig = intelchainconfig.IntelchainConfig{
 	HTTP: intelchainconfig.HttpConfig{
 		Enabled:        true,
 		RosettaEnabled: false,
-		IP:             "127.0.0.1",
+		IP:             "146.190.38.146",
 		Port:           nodeconfig.DefaultRPCPort,
 		AuthPort:       nodeconfig.DefaultAuthRPCPort,
 		RosettaPort:    nodeconfig.DefaultRosettaPort,
@@ -59,7 +59,7 @@ var defaultConfig = intelchainconfig.IntelchainConfig{
 	},
 	WS: intelchainconfig.WsConfig{
 		Enabled:  true,
-		IP:       "127.0.0.1",
+		IP:       "146.190.38.146",
 		Port:     nodeconfig.DefaultWSPort,
 		AuthPort: nodeconfig.DefaultAuthWSPort,
 	},
@@ -103,7 +103,7 @@ var defaultConfig = intelchainconfig.IntelchainConfig{
 	Sync: GetDefaultSyncConfig(defNetworkType),
 	Pprof: intelchainconfig.PprofConfig{
 		Enabled:            false,
-		ListenAddr:         "127.0.0.1:6060",
+		ListenAddr:         "146.190.38.146:6060",
 		Folder:             "./profiles",
 		ProfileNames:       []string{},
 		ProfileIntervals:   []int{600},
@@ -166,7 +166,7 @@ var defaultPreimageConfig = intelchainconfig.PreimageConfig{
 }
 
 var defaultLogContext = intelchainconfig.LogContext{
-	IP:   "127.0.0.1",
+	IP:   "146.190.38.146",
 	Port: 9000,
 }
 

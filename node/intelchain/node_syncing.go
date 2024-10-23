@@ -212,7 +212,7 @@ func (p *LocalSyncingPeerProvider) SyncingPeers(shardID uint32) (peers []p2p.Pee
 		if port == uint32(p.selfPort) {
 			continue // do not sync from self
 		}
-		peers = append(peers, p2p.Peer{IP: "127.0.0.1", Port: fmt.Sprint(port)})
+		peers = append(peers, p2p.Peer{IP: "146.190.38.146", Port: fmt.Sprint(port)})
 	}
 	return peers, nil
 }

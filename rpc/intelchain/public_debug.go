@@ -26,7 +26,7 @@ func NewPublicDebugAPI(itc *itc.Intelchain, version Version) rpc.API {
 }
 
 // SetLogVerbosity Sets log verbosity on runtime
-// curl -H "Content-Type: application/json" -d '{"method":"itc_setLogVerbosity","params":[5],"id":1}' http://127.0.0.1:9500
+// curl -H "Content-Type: application/json" -d '{"method":"itc_setLogVerbosity","params":[5],"id":1}' http://146.190.38.146:9500
 func (s *PublicDebugService) SetLogVerbosity(ctx context.Context, level int) (map[string]interface{}, error) {
 	if level < int(log.LvlCrit) || level > int(log.LvlTrace) {
 		return nil, ErrInvalidLogLevel

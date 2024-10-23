@@ -443,7 +443,7 @@ func TestClientReconnect(t *testing.T) {
 	defer cancel()
 
 	// Start a server and corresponding client.
-	s1, l1 := startServer("127.0.0.1:0")
+	s1, l1 := startServer("146.190.38.146:0")
 	client, err := DialContext(ctx, "ws://"+l1.Addr().String())
 	if err != nil {
 		t.Fatal("can't dial", err)

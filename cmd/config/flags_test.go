@@ -79,7 +79,7 @@ func TestIntelchainFlags(t *testing.T) {
 				},
 				HTTP: intelchainconfig.HttpConfig{
 					Enabled:        true,
-					IP:             "127.0.0.1",
+					IP:             "146.190.38.146",
 					Port:           9500,
 					AuthPort:       9501,
 					RosettaEnabled: false,
@@ -101,7 +101,7 @@ func TestIntelchainFlags(t *testing.T) {
 				},
 				WS: intelchainconfig.WsConfig{
 					Enabled:  true,
-					IP:       "127.0.0.1",
+					IP:       "146.190.38.146",
 					Port:     9800,
 					AuthPort: 9801,
 				},
@@ -136,7 +136,7 @@ func TestIntelchainFlags(t *testing.T) {
 				},
 				Pprof: intelchainconfig.PprofConfig{
 					Enabled:            false,
-					ListenAddr:         "127.0.0.1:6060",
+					ListenAddr:         "146.190.38.146:6060",
 					Folder:             "./profiles",
 					ProfileNames:       []string{},
 					ProfileIntervals:   []int{600},
@@ -390,7 +390,7 @@ func TestNetworkFlags(t *testing.T) {
 	}
 }
 
-var defDataStore = ".dht-127.0.0.1"
+var defDataStore = ".dht-146.190.38.146"
 
 func TestP2PFlags(t *testing.T) {
 	tests := []struct {

@@ -18,7 +18,7 @@ func TestToRPCServerConfig(t *testing.T) {
 			input: BootNodeConfig{
 				HTTP: HttpConfig{
 					Enabled:      true,
-					IP:           "127.0.0.1",
+					IP:           "146.190.38.146",
 					Port:         nodeconfig.DefaultRPCPort,
 					ReadTimeout:  "-1",
 					WriteTimeout: "-2",
@@ -26,7 +26,7 @@ func TestToRPCServerConfig(t *testing.T) {
 				},
 				WS: WsConfig{
 					Enabled: true,
-					IP:      "127.0.0.1",
+					IP:      "146.190.38.146",
 					Port:    nodeconfig.DefaultWSPort,
 				},
 				RPCOpt: RpcOptConfig{
@@ -40,13 +40,13 @@ func TestToRPCServerConfig(t *testing.T) {
 			},
 			output: nodeconfig.RPCServerConfig{
 				HTTPEnabled:        true,
-				HTTPIp:             "127.0.0.1",
+				HTTPIp:             "146.190.38.146",
 				HTTPPort:           nodeconfig.DefaultRPCPort,
 				HTTPTimeoutRead:    30 * time.Second,
 				HTTPTimeoutWrite:   30 * time.Second,
 				HTTPTimeoutIdle:    120 * time.Second,
 				WSEnabled:          true,
-				WSIp:               "127.0.0.1",
+				WSIp:               "146.190.38.146",
 				WSPort:             nodeconfig.DefaultWSPort,
 				DebugEnabled:       false,
 				EthRPCsEnabled:     true,

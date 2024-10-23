@@ -24,8 +24,8 @@ import (
 func TestAddNewBlock(t *testing.T) {
 	blsKey := bls.RandPrivateKey()
 	pubKey := blsKey.GetPublicKey()
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "9882", ConsensusPubKey: pubKey}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "9882", ConsensusPubKey: pubKey}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -82,8 +82,8 @@ func TestAddNewBlock(t *testing.T) {
 func TestVerifyNewBlock(t *testing.T) {
 	blsKey := bls.RandPrivateKey()
 	pubKey := blsKey.GetPublicKey()
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "8882", ConsensusPubKey: pubKey}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "8882", ConsensusPubKey: pubKey}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -142,8 +142,8 @@ func TestVerifyNewBlock(t *testing.T) {
 func TestVerifyVRF(t *testing.T) {
 	blsKey := bls.RandPrivateKey()
 	pubKey := blsKey.GetPublicKey()
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "8882", ConsensusPubKey: pubKey}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "8882", ConsensusPubKey: pubKey}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,

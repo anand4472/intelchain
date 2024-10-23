@@ -98,7 +98,7 @@ docker run -d -p 9700:9700 -v "$(pwd)/data:/root/data" intelchainitc/explorer-no
 Note that the directory structure for `/root/data` (== `./data`) should look something like:
 ```
 .
-├── explorer_storage_127.0.0.1_9000
+├── explorer_storage_146.190.38.146_9000
 ├── intelchain_db_0
 ├── intelchain_db_1
 ├── logs

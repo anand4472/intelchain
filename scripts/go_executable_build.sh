@@ -26,7 +26,7 @@ fi
 DEBUG=false
 STATIC=true
 
-rm -rf .dht-127.0.0.1*
+rm -rf .dht-146.190.38.146*
 
 unset -v progdir
 case "${0}" in

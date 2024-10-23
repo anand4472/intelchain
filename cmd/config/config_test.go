@@ -55,7 +55,7 @@ Version = "1.0.4"
 
 [HTTP]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9500
 
 [Log]
@@ -80,7 +80,7 @@ Version = "1.0.4"
 
 [Pprof]
   Enabled = false
-  ListenAddr = "127.0.0.1:6060"
+  ListenAddr = "146.190.38.146:6060"
 
 [TxPool]
   BlacklistFile = "./.itc/blacklist.txt"
@@ -113,7 +113,7 @@ Version = "1.0.4"
 
 [WS]
   Enabled = true
-  IP = "127.0.0.1"
+  IP = "146.190.38.146"
   Port = 9800`
 	testDir := filepath.Join(testBaseDir, t.Name())
 	os.RemoveAll(testDir)

@@ -130,7 +130,7 @@ func (mockBlockchain) ShardID() uint32 {
 
 func TestCreateStateSync(t *testing.T) {
 	pID, _ := peer.IDFromBytes([]byte{})
-	stateSync := CreateStateSync(mockBlockchain{}, "127.0.0.1", "8000", [20]byte{}, pID, false, nodeconfig.Validator)
+	stateSync := CreateStateSync(mockBlockchain{}, "146.190.38.146", "8000", [20]byte{}, pID, false, nodeconfig.Validator)
 
 	if stateSync == nil {
 		t.Error("Unable to create stateSync")

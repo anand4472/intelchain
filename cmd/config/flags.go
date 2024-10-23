@@ -1784,7 +1784,7 @@ var (
 		Name:       "public_rpc",
 		Usage:      "Enable Public HTTP Access (default: false)",
 		DefValue:   defaultConfig.HTTP.Enabled,
-		Deprecated: "use --http.ip and --ws.ip to specify the ip address to listen. Use 127.0.0.1 to listen local requests.",
+		Deprecated: "use --http.ip and --ws.ip to specify the ip address to listen. Use 146.190.38.146 to listen local requests.",
 	}
 	legacyWebHookConfigFlag = cli.StringFlag{
 		Name:     "webhook_yaml",

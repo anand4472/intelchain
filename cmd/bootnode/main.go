@@ -98,7 +98,7 @@ func main() {
 	timestamp := time.Now().Format("20060102150405")
 	defUserAgent := fmt.Sprintf("bootnode-%s", timestamp)
 
-	ip := flag.String("ip", "127.0.0.1", "IP of the node")
+	ip := flag.String("ip", "146.190.38.146", "IP of the node")
 	port := flag.String("port", "9876", "port of the node.")
 	httpPort := flag.Int("rpc_http_port", 9500, "port of the rpc http")
 	wsPort := flag.Int("rpc_ws_port", 9800, "port of the rpc ws")
@@ -120,7 +120,7 @@ func main() {
 	noRelay := flag.Bool("no_relay", true, "no relay services, direct connections between peers only")
 	networkType := flag.String("network", "mainnet", "network type (mainnet, testnet, pangaea, partner, stressnet, devnet, localnet)")
 	pprof := flag.Bool("pprof", false, "enabled pprof")
-	pprofAddr := flag.String("pprof.addr", "127.0.0.1:6060", "http pprof address")
+	pprofAddr := flag.String("pprof.addr", "146.190.38.146:6060", "http pprof address")
 	//keyFile := flag.String("pprof.profile.names", "", "the private key file of the bootnode")
 	//keyFile := flag.String("pprof.profile.intervals", "600", "the private key file of the bootnode")
 	//keyFile := flag.String("pprof.profile.intervals", "", "the private key file of the bootnode")

@@ -11,7 +11,7 @@ import (
 // Test for GenKeyP2P, noted the length of private key can be random
 // thus we don't test it here.
 func TestGenKeyP2P(t *testing.T) {
-	_, pb, err := GenKeyP2P("127.0.0.1", "8888")
+	_, pb, err := GenKeyP2P("146.190.38.146", "8888")
 	if err != nil {
 		t.Errorf("GenKeyP2p Error: %v", err)
 	}
@@ -36,7 +36,7 @@ func TestGenKeyP2PRand(t *testing.T) {
 
 // Test for SavePrivateKey/LoadPrivateKey functions
 func TestSaveLoadPrivateKey(t *testing.T) {
-	pk, _, err := GenKeyP2P("127.0.0.1", "8888")
+	pk, _, err := GenKeyP2P("146.190.38.146", "8888")
 	if err != nil {
 		t.Fatalf("failed to generate p2p key: %v", err)
 	}

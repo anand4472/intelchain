@@ -117,7 +117,7 @@ func TestServerShortLivedConn(t *testing.T) {
 	server := newTestServer()
 	defer server.Stop()
 
-	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	listener, err := net.Listen("tcp", "146.190.38.146:0")
 	if err != nil {
 		t.Fatal("can't listen:", err)
 	}

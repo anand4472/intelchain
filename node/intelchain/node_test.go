@@ -25,8 +25,8 @@ var testDBFactory = &shardchain.MemDBFactory{}
 func TestNewNode(t *testing.T) {
 	blsKey := bls.RandPrivateKey()
 	pubKey := blsKey.GetPublicKey()
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "8882", ConsensusPubKey: pubKey}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "8882", ConsensusPubKey: pubKey}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -112,9 +112,9 @@ func TestLocalSyncingPeerProvider(t *testing.T) {
 	t.Run("BeaconChain", func(t *testing.T) {
 		p := makeLocalSyncingPeerProvider()
 		expectedBeaconPeers := []p2p.Peer{
-			{IP: "127.0.0.1", Port: "6000"},
-			{IP: "127.0.0.1", Port: "6002"},
-			{IP: "127.0.0.1", Port: "6004"},
+			{IP: "146.190.38.146", Port: "6000"},
+			{IP: "146.190.38.146", Port: "6002"},
+			{IP: "146.190.38.146", Port: "6004"},
 		}
 		if actualPeers, err := p.SyncingPeers(0); assert.NoError(t, err) {
 			assert.ElementsMatch(t, actualPeers, expectedBeaconPeers)
@@ -124,8 +124,8 @@ func TestLocalSyncingPeerProvider(t *testing.T) {
 		p := makeLocalSyncingPeerProvider()
 		expectedShard1Peers := []p2p.Peer{
 			// port 6001 omitted because self
-			{IP: "127.0.0.1", Port: "6003"},
-			{IP: "127.0.0.1", Port: "6005"},
+			{IP: "146.190.38.146", Port: "6003"},
+			{IP: "146.190.38.146", Port: "6005"},
 		}
 		if actualPeers, err := p.SyncingPeers(1); assert.NoError(t, err) {
 			assert.ElementsMatch(t, actualPeers, expectedShard1Peers)

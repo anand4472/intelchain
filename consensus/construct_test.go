@@ -19,8 +19,8 @@ import (
 )
 
 func TestConstructAnnounceMessage(test *testing.T) {
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "19999"}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "19999"}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -49,11 +49,11 @@ func TestConstructAnnounceMessage(test *testing.T) {
 func TestConstructPreparedMessage(test *testing.T) {
 	leaderPriKey := bls.RandPrivateKey()
 	leaderPubKey := leaderPriKey.GetPublicKey()
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "19999", ConsensusPubKey: leaderPubKey}
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "19999", ConsensusPubKey: leaderPubKey}
 
 	validatorPriKey := bls.RandPrivateKey()
 	validatorPubKey := leaderPriKey.GetPublicKey()
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -121,8 +121,8 @@ func TestConstructPreparedMessage(test *testing.T) {
 }
 
 func TestConstructPrepareMessage(test *testing.T) {
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "19999"}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "19999"}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -213,8 +213,8 @@ func TestConstructPrepareMessage(test *testing.T) {
 }
 
 func TestConstructCommitMessage(test *testing.T) {
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "19999"}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "19999"}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,
@@ -305,8 +305,8 @@ func TestConstructCommitMessage(test *testing.T) {
 }
 
 func TestPopulateMessageFields(t *testing.T) {
-	leader := p2p.Peer{IP: "127.0.0.1", Port: "9902"}
-	priKey, _, _ := utils.GenKeyP2P("127.0.0.1", "9902")
+	leader := p2p.Peer{IP: "146.190.38.146", Port: "9902"}
+	priKey, _, _ := utils.GenKeyP2P("146.190.38.146", "9902")
 	host, err := p2p.NewHost(p2p.HostConfig{
 		Self:   &leader,
 		BLSKey: priKey,

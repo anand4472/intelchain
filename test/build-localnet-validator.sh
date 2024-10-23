@@ -9,12 +9,12 @@ itc keys import-ks .itc/extkeystore/one19zzwsxr0uf2fe34y8qkadek2v0eh6h5mg2deg6.k
 itc keys import-ks .itc/extkeystore/one1lctumupg2y009pjmnhnmn4nqjk0zf0dspjanf7.key 2> /dev/null
 
 echo "Let's fund all the validator account"
-itc --node=http://127.0.0.1:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one17ughrllgnzx9sfa46p568k8rdmtz7qj85slc6t     --from-shard 0 --to-shard 0 --amount 110000 
-itc --node=http://127.0.0.1:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one1auqndgthqu5lznsn7tuma8s5333cq0y07cwc6x     --from-shard 0 --to-shard 0 --amount 110000 
-itc --node=http://127.0.0.1:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one19aw2wcr5y4lxeuwt0ajgt5aw3a3qkjdgg67ygj     --from-shard 0 --to-shard 0 --amount 110000 
-itc --node=http://127.0.0.1:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one1eenp9ujcrmyaq22ef6jrpry2k97tjz4xs6ppcf     --from-shard 0 --to-shard 0 --amount 110000 
-itc --node=http://127.0.0.1:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one19zzwsxr0uf2fe34y8qkadek2v0eh6h5mg2deg6     --from-shard 0 --to-shard 0 --amount 110000 
-itc --node=http://127.0.0.1:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one1lctumupg2y009pjmnhnmn4nqjk0zf0dspjanf7     --from-shard 0 --to-shard 0 --amount 110000 
+itc --node=http://146.190.38.146:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one17ughrllgnzx9sfa46p568k8rdmtz7qj85slc6t     --from-shard 0 --to-shard 0 --amount 110000 
+itc --node=http://146.190.38.146:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one1auqndgthqu5lznsn7tuma8s5333cq0y07cwc6x     --from-shard 0 --to-shard 0 --amount 110000 
+itc --node=http://146.190.38.146:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one19aw2wcr5y4lxeuwt0ajgt5aw3a3qkjdgg67ygj     --from-shard 0 --to-shard 0 --amount 110000 
+itc --node=http://146.190.38.146:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one1eenp9ujcrmyaq22ef6jrpry2k97tjz4xs6ppcf     --from-shard 0 --to-shard 0 --amount 110000 
+itc --node=http://146.190.38.146:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one19zzwsxr0uf2fe34y8qkadek2v0eh6h5mg2deg6     --from-shard 0 --to-shard 0 --amount 110000 
+itc --node=http://146.190.38.146:9500 transfer     --from one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur --to one1lctumupg2y009pjmnhnmn4nqjk0zf0dspjanf7     --from-shard 0 --to-shard 0 --amount 110000 
 
 
 #wait for epoch 2

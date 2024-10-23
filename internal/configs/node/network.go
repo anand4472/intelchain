@@ -37,7 +37,7 @@ const (
 
 const (
 	// DefaultLocalListenIP is the IP used for local hosting
-	DefaultLocalListenIP = "127.0.0.1"
+	DefaultLocalListenIP = "146.190.38.146"
 	// DefaultPublicListenIP is the IP used for public hosting
 	DefaultPublicListenIP = "0.0.0.0"
 	// DefaultP2PPort is the key to be used for p2p communication
