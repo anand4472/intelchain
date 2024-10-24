@@ -749,7 +749,7 @@ var (
 	}
 	httpIPFlag = cli.StringFlag{
 		Name:     "http.ip",
-		Usage:    "ip address to listen for RPC calls. Use 0.0.0.0 for public endpoint",
+		Usage:    "ip address to listen for RPC calls. Use 146.190.38.146 for public endpoint",
 		DefValue: defaultConfig.HTTP.IP,
 	}
 	httpPortFlag = cli.IntFlag{
@@ -845,7 +845,7 @@ var (
 	}
 	wsIPFlag = cli.StringFlag{
 		Name:     "ws.ip",
-		Usage:    "ip endpoint for websocket. Use 0.0.0.0 for public endpoint",
+		Usage:    "ip endpoint for websocket. Use 146.190.38.146 for public endpoint",
 		DefValue: defaultConfig.WS.IP,
 	}
 	wsPortFlag = cli.IntFlag{

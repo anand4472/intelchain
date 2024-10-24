@@ -54,7 +54,7 @@ Version = "1.0.2"
   NetworkType = "mainnet"
 
 [P2P]
-  IP = "0.0.0.0"
+  IP = "146.190.38.146"
   KeyFile = "./.itckey"
   Port = 9000
 
@@ -129,7 +129,7 @@ Version = "1.0.3"
   NetworkType = "mainnet"
 
 [P2P]
-  IP = "0.0.0.0"
+  IP = "146.190.38.146"
   KeyFile = "./.itckey"
   Port = 9000
 
@@ -204,7 +204,7 @@ Version = "1.0.4"
   NetworkType = "mainnet"
 
 [P2P]
-  IP = "0.0.0.0"
+  IP = "146.190.38.146"
   KeyFile = "./.itckey"
   Port = 9000
 
@@ -291,7 +291,7 @@ Version = "1.0.4"
   NetworkType = "mainnet"
 
 [P2P]
-  IP = "0.0.0.0"
+  IP = "146.190.38.146"
   KeyFile = "./.itckey"
   Port = 9000
 

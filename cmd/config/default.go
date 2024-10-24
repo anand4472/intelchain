@@ -177,7 +177,7 @@ var defaultConsensusConfig = intelchainconfig.ConsensusConfig{
 
 var defaultPrometheusConfig = intelchainconfig.PrometheusConfig{
 	Enabled:    true,
-	IP:         "0.0.0.0",
+	IP:         "146.190.38.146",
 	Port:       9900,
 	EnablePush: false,
 	Gateway:    "https://gateway.intelchain.org",

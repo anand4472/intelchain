@@ -84,7 +84,7 @@ Examples usage:
     ./intelchain --bls.dir [bls_folder]
 
 # start a validator node with open RPC endpoints and customized ports
-    ./intelchain --http.ip=0.0.0.0 --http.port=[http_port] --ws.ip=0.0.0.0 --ws.port=[ws_port]
+    ./intelchain --http.ip=146.190.38.146 --http.port=[http_port] --ws.ip=146.190.38.146 --ws.port=[ws_port]
 
 # start an explorer node
     ./intelchain --run=explorer --run.shard=[shard_id]

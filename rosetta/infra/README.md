@@ -57,7 +57,7 @@ docker stop [CONTAINER ID]
 
 **Note that all the arguments provided when running the docker img are immediately forwarded to the intelchain node binary.**
 > Note that the following args are **appended** to the provided arg when running the image: 
-> `--http.ip "0.0.0.0" --ws.ip "0.0.0.0" --http.rosetta --node_type "explorer" --datadir "./data" --log.dir "./data/logs"`.
+> `--http.ip "146.190.38.146" --ws.ip "146.190.38.146" --http.rosetta --node_type "explorer" --datadir "./data" --log.dir "./data/logs"`.
 > This effectively makes them args that you cannot easily change.  
 
 ### Running the node on testnet

@@ -166,7 +166,7 @@ func TestIntelchainFlags(t *testing.T) {
 				},
 				Prometheus: &intelchainconfig.PrometheusConfig{
 					Enabled:    true,
-					IP:         "0.0.0.0",
+					IP:         "146.190.38.146",
 					Port:       9900,
 					EnablePush: true,
 					Gateway:    "https://gateway.intelchain.org",
