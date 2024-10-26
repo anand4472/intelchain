@@ -418,6 +418,7 @@ func setupNodeAndRun(hc intelchainconfig.IntelchainConfig) {
 				Err(err).
 				Msg("Start p2p host failed")
 		}
+		
 
 		if err := currentNode.BootstrapConsensus(); err != nil {
 			fmt.Fprint(os.Stderr, "could not bootstrap consensus", err.Error())

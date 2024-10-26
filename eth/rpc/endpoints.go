@@ -44,7 +44,7 @@ func StartHTTPEndpoint(endpoint string, apis []API, modules []string, rmf *RpcMe
 		listener net.Listener
 		err      error
 	)
-	if listener, err = net.Listen("tcp", endpoint); err != nil {
+	if listener, err = net.Listen("tcp4", endpoint); err != nil {
 		return nil, nil, err
 	}
 	go NewHTTPServer(cors, vhosts, timeouts, handler).Serve(listener)
@@ -74,7 +74,7 @@ func StartWSEndpoint(endpoint string, apis []API, modules []string, rmf *RpcMeth
 		listener net.Listener
 		err      error
 	)
-	if listener, err = net.Listen("tcp", endpoint); err != nil {
+	if listener, err = net.Listen("tcp4", endpoint); err != nil {
 		return nil, nil, err
 	}
 	go NewWSServer(wsOrigins, handler).Serve(listener)
