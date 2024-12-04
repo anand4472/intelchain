@@ -31,7 +31,7 @@ func TestIntelchainFlags(t *testing.T) {
 				"/ip4/54.213.43.194/tcp/9874/p2p/QmZJJx6AdaoEkGLrYG4JeLCKeCKDjnFz2wfHNHxAqFSGA9,/ip4/13.113.101." +
 				"219/tcp/12019/p2p/QmQayinFSgMMw5cSpDUiD9pQ2WeP6WNmGxpZ6ou3mdVFJX,/ip4/99.81.170.167/tcp/12019/p" +
 				"2p/QmRVbTpEYup8dSaURZfF6ByrMTSKa4UyUzJhSjahFzRqNj --ip 8.8.8.8 --port 9000 --network_type=mainn" +
-				"et --dns_zone=t.hmny.io --blacklist=./.itc/blacklist.txt --min_peers=6 --max_bls_keys_per_node=" +
+				"et --dns_zone=intelchain.network --blacklist=./.itc/blacklist.txt --min_peers=6 --max_bls_keys_per_node=" +
 				"10 --broadcast_invalid_tx=true --verbosity=3 --is_archival=false --shard_id=-1 --staking=true -" +
 				"-aws-config-source file:config.json --p2p.disc.concurrency 5 --p2p.security.max-conn-per-ip 5",
 			expConfig: intelchainconfig.IntelchainConfig{
@@ -55,7 +55,7 @@ func TestIntelchainFlags(t *testing.T) {
 				},
 				DNSSync: intelchainconfig.DnsSync{
 					Port:       6000,
-					Zone:       "t.hmny.io",
+					Zone:       "intelchain.network",
 					Server:     true,
 					Client:     true,
 					ServerPort: nodeconfig.DefaultDNSPort,

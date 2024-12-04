@@ -33,9 +33,9 @@ const (
 	partnerVdfDifficulty = 10000 // This takes about 20s to finish the vdf
 
 	// PartnerHTTPPattern is the http pattern for partner.
-	PartnerHTTPPattern = "https://api.s%d.ps.hmny.io"
+	PartnerHTTPPattern = "https://api.s%d.ps.intelchain.network"
 	// PartnerWSPattern is the websocket pattern for partner.
-	PartnerWSPattern = "wss://ws.s%d.ps.hmny.io"
+	PartnerWSPattern = "wss://ws.s%d.ps.intelchain.network"
 )
 
 func (ps partnerSchedule) InstanceForEpoch(epoch *big.Int) Instance {

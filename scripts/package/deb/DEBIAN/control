@@ -1,0 +1,14 @@
+{{VER=2.0.0}}
+Package: intelchain
+Version: {{ VER }}
+License: MIT
+Vendor: Intelchain blockchain
+Architecture: amd64
+Source: https://github.com/intelchain-itc/intelchain
+Maintainer: Leo Chen <leo@intelchain.network>
+Section: net
+Priority: extra
+Homepage: https://intelchain.org
+Description: Fast & secure sharded blockchain.
+Build-Dep: dh-systemd
+Recommends: jq, rclone (>= 1.52.3)

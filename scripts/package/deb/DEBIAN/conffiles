@@ -1,0 +1,4 @@
+/etc/intelchain/intelchain.conf
+/etc/intelchain/rclone.conf
+/etc/sysctl.d/99-intelchain.conf
+/etc/systemd/system/intelchain.service

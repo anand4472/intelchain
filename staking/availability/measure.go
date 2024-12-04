@@ -1,0 +1,301 @@
+package availability
+
+import (
+	"math/big"
+
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/intelchain-itc/intelchain/core/state"
+	"github.com/intelchain-itc/intelchain/crypto/bls"
+	"github.com/intelchain-itc/intelchain/internal/utils"
+	"github.com/intelchain-itc/intelchain/numeric"
+	"github.com/intelchain-itc/intelchain/shard"
+	"github.com/intelchain-itc/intelchain/staking/effective"
+	staking "github.com/intelchain-itc/intelchain/staking/types"
+	"github.com/pkg/errors"
+)
+
+var (
+	measure = numeric.NewDec(2).Quo(numeric.NewDec(3))
+
+	minCommissionRateEra1 = numeric.MustNewDecFromStr("0.05")
+	minCommissionRateEra2 = numeric.MustNewDecFromStr("0.07")
+	// ErrDivByZero ..
+	ErrDivByZero = errors.New("toSign of availability cannot be 0, mistake in protocol")
+)
+
+// Returns the minimum commission rate between the two options.
+// The later rate supersedes the earlier rate.
+// If neither is applicable, returns 0.
+func MinCommissionRate(era1, era2 bool) numeric.Dec {
+	if era2 {
+		return minCommissionRateEra2
+	}
+	if era1 {
+		return minCommissionRateEra1
+	}
+	return numeric.ZeroDec()
+}
+
+// BlockSigners ..
+func BlockSigners(
+	bitmap []byte, parentCommittee *shard.Committee,
+) (shard.SlotList, shard.SlotList, error) {
+	committerKeys, err := parentCommittee.BLSPublicKeys()
+	if err != nil {
+		return nil, nil, err
+	}
+	mask := bls.NewMask(committerKeys)
+	if err := mask.SetMask(bitmap); err != nil {
+		return nil, nil, err
+	}
+
+	payable, missing := shard.SlotList{}, shard.SlotList{}
+
+	for idx, member := range parentCommittee.Slots {
+		switch signed, err := mask.IndexEnabled(idx); true {
+		case err != nil:
+			return nil, nil, err
+		case signed:
+			payable = append(payable, member)
+		default:
+			missing = append(missing, member)
+		}
+	}
+	return payable, missing, nil
+}
+
+// BallotResult returns
+// (parentCommittee.Slots, payable, missings, err)
+func BallotResult(
+	parentHeader, header RoundHeader, parentShardState *shard.State, shardID uint32,
+) (shard.SlotList, shard.SlotList, shard.SlotList, error) {
+	parentCommittee, err := parentShardState.FindCommitteeByID(shardID)
+
+	if err != nil {
+		return nil, nil, nil, errors.Errorf(
+			"cannot find shard in the shard state %d %d",
+			parentHeader.Number(),
+			parentHeader.ShardID(),
+		)
+	}
+
+	payable, missing, err := BlockSigners(
+		header.LastCommitBitmap(), parentCommittee,
+	)
+	return parentCommittee.Slots, payable, missing, err
+}
+
+type signerKind struct {
+	didSign   bool
+	committee shard.SlotList
+}
+
+func bumpCount(
+	state ValidatorState,
+	signers []signerKind,
+	stakedAddrSet map[common.Address]struct{},
+) error {
+	for _, subset := range signers {
+		for i := range subset.committee {
+			addr := subset.committee[i].EcdsaAddress
+			// NOTE if the signer address is not part of the staked addrs,
+			// then it must be a intelchain operated node running,
+			// hence keep on going
+			if _, isAddrForStaked := stakedAddrSet[addr]; !isAddrForStaked {
+				continue
+			}
+
+			wrapper, err := state.ValidatorWrapper(addr, true, false)
+			if err != nil {
+				return err
+			}
+
+			wrapper.Counters.NumBlocksToSign.Add(
+				wrapper.Counters.NumBlocksToSign, common.Big1,
+			)
+
+			if subset.didSign {
+				wrapper.Counters.NumBlocksSigned.Add(
+					wrapper.Counters.NumBlocksSigned, common.Big1,
+				)
+			}
+		}
+	}
+
+	return nil
+}
+
+// IncrementValidatorSigningCounts ..
+func IncrementValidatorSigningCounts(
+	staked *shard.StakedSlots,
+	state ValidatorState,
+	signers, missing shard.SlotList,
+) error {
+	return bumpCount(
+		state, []signerKind{{false, missing}, {true, signers}},
+		staked.LookupSet,
+	)
+}
+
+// ComputeCurrentSigning returns (signed, toSign, quotient, error)
+func ComputeCurrentSigning(snapshot, wrapper *staking.ValidatorWrapper, isHip32 bool) *staking.Computed {
+	statsNow, snapSigned, snapToSign :=
+		wrapper.Counters,
+		snapshot.Counters.NumBlocksSigned,
+		snapshot.Counters.NumBlocksToSign
+
+	signed, toSign :=
+		new(big.Int).Sub(statsNow.NumBlocksSigned, snapSigned),
+		new(big.Int).Sub(statsNow.NumBlocksToSign, snapToSign)
+
+	computed := staking.NewComputed(
+		signed, toSign, 0, numeric.ZeroDec(), true,
+	)
+
+	if toSign.Cmp(common.Big0) == 0 {
+		if isHip32 {
+			computed.IsBelowThreshold = false
+		}
+		return computed
+	}
+
+	if signed.Sign() == -1 {
+		// Shouldn't happen
+		utils.Logger().Error().Msg("negative number of signed blocks")
+	}
+
+	if toSign.Sign() == -1 {
+		// Shouldn't happen
+		utils.Logger().Error().Msg("negative number of blocks to sign")
+	}
+
+	s1, s2 := numeric.NewDecFromBigInt(signed), numeric.NewDecFromBigInt(toSign)
+	computed.Percentage = s1.Quo(s2)
+	computed.IsBelowThreshold = IsBelowSigningThreshold(computed.Percentage)
+	return computed
+}
+
+// IsBelowSigningThreshold ..
+func IsBelowSigningThreshold(quotient numeric.Dec) bool {
+	return quotient.LTE(measure)
+}
+
+// ComputeAndMutateEPOSStatus sets the validator to
+// inactive and thereby keeping it out of
+// consideration in the pool of validators for
+// whenever committee selection happens in future, the
+// signing threshold is 66%
+func ComputeAndMutateEPOSStatus(
+	bc Reader,
+	state ValidatorState,
+	addr common.Address,
+) error {
+	utils.Logger().Info().Msg("begin compute for availability")
+
+	wrapper, err := state.ValidatorWrapper(addr, true, false)
+	if err != nil {
+		return err
+	}
+	if wrapper.Status == effective.Banned {
+		utils.Logger().Debug().Msg("Can't update EPoS status on a banned validator")
+		return nil
+	}
+
+	snapshot, err := bc.ReadValidatorSnapshot(wrapper.Address)
+	if err != nil {
+		return err
+	}
+
+	computed := ComputeCurrentSigning(snapshot.Validator, wrapper, bc.Config().IsHIP32(snapshot.Epoch))
+
+	utils.Logger().
+		Info().Msg("check if signing percent is meeting required threshold")
+
+	const missedTooManyBlocks = true
+
+	switch computed.IsBelowThreshold {
+	case missedTooManyBlocks:
+		wrapper.Status = effective.Inactive
+		utils.Logger().Info().
+			Str("threshold", measure.String()).
+			Interface("computed", computed).
+			Str("validator", snapshot.Validator.Address.String()).
+			Msg("validator failed availability threshold, set to inactive")
+	default:
+		// Default is no-op so validator who wants
+		// to leave the committee can actually leave.
+	}
+
+	return nil
+}
+
+// UpdateMinimumCommissionFee update the validator commission fee to the minRate
+// if the validator has a lower commission rate and promoPeriod epochs have passed after
+// the validator was first elected. It returns true if the commission was updated
+func UpdateMinimumCommissionFee(
+	electionEpoch *big.Int,
+	state *state.DB,
+	addr common.Address,
+	minRate numeric.Dec,
+	promoPeriod uint64,
+) (bool, error) {
+	utils.Logger().Info().Msg("begin update min commission fee")
+
+	wrapper, err := state.ValidatorWrapper(addr, true, false)
+	if err != nil {
+		return false, err
+	}
+
+	firstElectionEpoch := state.GetValidatorFirstElectionEpoch(addr)
+
+	// convert all to uint64 for easy maths
+	// this can take decades of time without overflowing
+	first := firstElectionEpoch.Uint64()
+	election := electionEpoch.Uint64()
+	if first != 0 && election-first >= promoPeriod && election >= first {
+		if wrapper.Rate.LT(minRate) {
+			utils.Logger().Info().
+				Str("addr", addr.Hex()).
+				Str("old rate", wrapper.Rate.String()).
+				Str("firstElectionEpoch", firstElectionEpoch.String()).
+				Msg("updating min commission rate")
+			wrapper.Rate.SetBytes(minRate.Bytes())
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+type stateValidatorWrapper interface {
+	ValidatorWrapper(addr common.Address, sendOriginal bool, copyDelegations bool) (*staking.ValidatorWrapper, error)
+}
+
+// UpdateMaxCommissionFee makes sure the max-rate is at least higher than the rate + max-rate-change.
+func UpdateMaxCommissionFee(IsTopMaxRate bool, state stateValidatorWrapper, addr common.Address, curRate numeric.Dec) error {
+	utils.Logger().Info().Msg("begin update max commission fee")
+
+	wrapper, err := state.ValidatorWrapper(addr, true, false)
+	if err != nil {
+		return err
+	}
+
+	newRate := curRate.Add(wrapper.MaxChangeRate)
+
+	if IsTopMaxRate {
+		hundredPercent := numeric.NewDec(1)
+		if newRate.GT(hundredPercent) {
+			newRate = hundredPercent
+		}
+	}
+
+	if wrapper.MaxRate.LT(newRate) {
+		utils.Logger().Info().
+			Str("addr", addr.Hex()).
+			Str("old max-rate", wrapper.MaxRate.String()).
+			Str("new max-rate", newRate.String()).
+			Msg("updating max commission rate")
+		wrapper.MaxRate.SetBytes(newRate.Bytes())
+	}
+
+	return nil
+}
