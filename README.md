@@ -22,9 +22,7 @@ brew install --cask docker
 open /Applications/Docker.app
 ```
 On Linux, reference official documentation [here](https://docs.docker.com/engine/install/).
-### **Bash 4+**
 
-For macOS, you can reference this [guide](http://tldrdevnotes.com/bash-upgrade-3-4-macos). For Linux, you can reference this [guide](https://fossbytes.com/installing-gnu-bash-4-4-linux-distros/).
 
 ## Dev Environment
 
