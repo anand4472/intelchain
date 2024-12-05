@@ -164,7 +164,7 @@ func TestIntelchainFlags(t *testing.T) {
 					IP:         "0.0.0.0",
 					Port:       9900,
 					EnablePush: true,
-					Gateway:    "https://gateway.intelchain.one",
+					Gateway:    "https://gateway.intelchain.network",
 				},
 				Sync: defaultMainnetSyncConfig,
 				ShardData: intelchainconfig.ShardDataConfig{

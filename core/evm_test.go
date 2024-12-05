@@ -31,7 +31,7 @@ func getTestEnvironment(testBankKey ecdsa.PrivateKey) (*BlockChainImpl, *state.D
 	// initialize
 	var (
 		testBankAddress = crypto.PubkeyToAddress(testBankKey.PublicKey)
-		testBankFunds   = new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(40000))
+		testBankFunds   = new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(40000))
 		chainConfig     = params.TestChainConfig
 		blockFactory    = blockfactory.ForTest
 		database        = rawdb.NewMemoryDatabase()
@@ -100,7 +100,7 @@ func TestEVMStaking(t *testing.T) {
 	// add undelegations in epoch0
 	wrapper.Delegations[0].Undelegations = []staking.Undelegation{
 		{
-			Amount: new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(10000)),
+			Amount: new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(10000)),
 			Epoch:  common.Big0,
 		},
 	}
@@ -195,7 +195,7 @@ func TestEVMStaking(t *testing.T) {
 	//// migration test - when `to` has one delegation
 	//wrapper, _ = db.ValidatorWrapper(createValidator.ValidatorAddress, false, true)
 	//wrapper.Delegations = append(wrapper.Delegations, staking.NewDelegation(
-	//	migration.To, new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(100))))
+	//	migration.To, new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(100))))
 	//expectedAmount = big.NewInt(0).Add(
 	//	wrapper.Delegations[0].Amount, wrapper.Delegations[1].Amount,
 	//)
