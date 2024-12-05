@@ -81,7 +81,7 @@ func (r *stakingEra) ReadRoundResult() *reward.CompletedRound {
 
 func adjust(amount numeric.Dec) numeric.Dec {
 	return amount.MulTruncate(
-		numeric.NewDecFromBigInt(big.NewInt(denominations.One)),
+		numeric.NewDecFromBigInt(big.NewInt(denominations.ITC)),
 	)
 }
 
