@@ -1,4 +1,4 @@
-module github.com/intelchain-itc/harmony
+module github.com/intelchain-itc/intelchain
 
 go 1.19
 
