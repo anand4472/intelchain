@@ -128,7 +128,7 @@ func WhatPercentStakedNow(
 	percentage := stakedNow.Quo(stakingReward.TotalInitialTokens.Mul(
 		reward.PercentageForTimeStamp(timestamp),
 	).Add(dole))
-	utils.Logger().Info().
+	utils.GetLogger().Info().
 		Str("so-far-doled-out", dole.String()).
 		Str("staked-percentage", percentage.String()).
 		Str("currently-staked", stakedNow.String()).

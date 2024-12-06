@@ -109,8 +109,8 @@ jobs:
           sudo ln -sf /usr/local/opt/openssl@1.1 /usr/local/opt/openssl
           # hack for older chip (macos)
           sudo mkdir -p /opt/homebrew/opt
-          sudo ln -sf /usr/local/opt/openssl@1.1 /opt/homebrew/opt/openssl@1.1
-          sudo ln -sf /usr/local/opt/gmp /opt/homebrew/opt/gmp
+          sudo ln -sf /usr/local/opt/openssl@1.1 /usr/local/opt/openssl@1.1
+          sudo ln -sf /usr/local/opt/gmp /usr/local/opt/gmp
           make
           cd ./bin && mkdir ./lib && mv ./*.dylib ./lib && rm -f ./bootnode
           gpg --detach-sign intelchain

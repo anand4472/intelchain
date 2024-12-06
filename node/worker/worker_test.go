@@ -81,7 +81,7 @@ func TestCommitTransactions(t *testing.T) {
 	// Generate a test tx
 	baseNonce := worker.GetCurrentState().GetNonce(crypto.PubkeyToAddress(testBankKey.PublicKey))
 	randAmount := rand.Float32()
-	tx, _ := types.SignTx(types.NewTransaction(baseNonce, testBankAddress, uint32(0), big.NewInt(int64(denominations.ITC)*randAmount)), params.TxGas, nil, nil), types.HomesteadSigner{}, testBankKey)
+	tx, _ := types.SignTx(types.NewTransaction(baseNonce, testBankAddress, uint32(0), big.NewInt(int64(denominations.ITC)*int64(randAmount)), 21000, big.NewInt(1), nil), types.HomesteadSigner{}, testBankKey)
 
 	// Commit the tx to the worker
 	txs := make(map[common.Address]types.Transactions)
