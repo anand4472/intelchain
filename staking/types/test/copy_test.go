@@ -78,7 +78,7 @@ func makeNonZeroValidator() staking.Validator {
 	d := staking.Description{
 		Name:     "Wayne",
 		Identity: "wen",
-		Website:  "intelchain.network",
+		Website:  "intelchain.network.wen",
 		Details:  "best",
 	}
 	v := staking.Validator{

@@ -2,11 +2,11 @@ package nodeconfig
 
 var (
 	mainnetBootNodes = []string{
-		"/dnsaddr/bootstrap.intelchain.network",
+		"/dnsaddr/bootstrap.t.intelchain.network",
 	}
 
 	testnetBootNodes = []string{
-		"/dnsaddr/bootstrap.b.hmny.io",
+		"/dnsaddr/bootstrap.b.intelchain.network",
 	}
 
 	pangaeaBootNodes = []string{
@@ -26,8 +26,8 @@ var (
 )
 
 const (
-	mainnetDNSZone   = "intelchain.network"
-	testnetDNSZone   = "b.hmny.io"
+	mainnetDNSZone   = "t.intelchain.network"
+	testnetDNSZone   = "b.intelchain.network"
 	pangaeaDNSZone   = "os.hmny.io"
 	partnerDNSZone   = "ps.intelchain.network"
 	stressnetDNSZone = "stn.hmny.io"

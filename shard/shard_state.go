@@ -26,7 +26,6 @@ var (
 
 // State is the collection of all committees
 type State struct {
-	// Epoch can be nil
 	Epoch  *big.Int    `json:"epoch"`
 	Shards []Committee `json:"shards"`
 }

@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	versionFormat = "Intelchain Protocol (C) 2023. %v, version %v-%v (%v %v)"
+	versionFormat = "Intelchain (C) 2023. %v, version %v-%v (%v %v)"
 )
 
 // Version string variables
@@ -37,8 +37,8 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-func getintelchainVersion() string {
-	return fmt.Sprintf(versionFormat, "Intelchain", version, commit, builtBy, builtAt)
+func getIntelchainVersion() string {
+	return fmt.Sprintf(versionFormat, "intelchain", version, commit, builtBy, builtAt)
 }
 
 func printVersion() {

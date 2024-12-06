@@ -68,9 +68,9 @@ Version = "1.0.4"
   Verbosity = 3
 
 [Network]
-  BootNodes = ["/dnsaddr/bootstrap.intelchain.network"]
+  BootNodes = ["/dnsaddr/bootstrap.t.intelchain.network"]
   DNSPort = 9000
-  DNSZone = "intelchain.network"
+  DNSZone = "t.intelchain.network"
   LegacySyncing = false
   NetworkType = "mainnet"
 

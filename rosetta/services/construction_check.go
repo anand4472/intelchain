@@ -15,7 +15,7 @@ import (
 	ethRpc "github.com/intelchain-itc/intelchain/eth/rpc"
 	"github.com/intelchain-itc/intelchain/internal/params"
 	"github.com/intelchain-itc/intelchain/rosetta/common"
-	rpc "github.com/intelchain-itc/intelchain/rpc/intelchain"
+	"github.com/intelchain-itc/intelchain/rpc"
 )
 
 // ConstructMetadataOptions is constructed by ConstructionPreprocess for ConstructionMetadata options

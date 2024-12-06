@@ -15,28 +15,28 @@ import (
 var (
 	// PreStakedBlocks is the block reward, to be split evenly among block signers in pre-staking era.
 	// 24 ONE per block
-	PreStakedBlocks = new(big.Int).Mul(big.NewInt(24), big.NewInt(denominations.ITC))
+	PreStakedBlocks = new(big.Int).Mul(big.NewInt(24), big.NewInt(denominations.Itc))
 	// StakedBlocks is the flat-rate block reward for epos staking launch.
 	// 28 ONE per block.
 	StakedBlocks = numeric.NewDecFromBigInt(new(big.Int).Mul(
-		big.NewInt(28), big.NewInt(denominations.ITC),
+		big.NewInt(28), big.NewInt(denominations.Itc),
 	))
 	// FiveSecStakedBlocks is the flat-rate block reward after epoch 230.
 	// 17.5 ONE per block
 	FiveSecStakedBlocks = numeric.NewDecFromBigInt(new(big.Int).Mul(
-		big.NewInt(17.5*denominations.Intello), big.NewInt(denominations.Intello),
+		big.NewInt(17.5*denominations.Ticks), big.NewInt(denominations.Ticks),
 	))
 	// TwoSecStakedBlocks is the flat-rate block reward after epoch 360.
 	// 7 ONE per block
 	TwoSecStakedBlocks = numeric.NewDecFromBigInt(new(big.Int).Mul(
-		big.NewInt(7*denominations.Intello), big.NewInt(denominations.Intello),
+		big.NewInt(7*denominations.Ticks), big.NewInt(denominations.Ticks),
 	))
 	// HIP30StakedBlocks is the reward received after HIP-30 goes into
 	// effect. It is simply double the TwoSecStakedBlocks reward, since
 	// the number of shards is being halved and we keep emission
 	// constant.
 	HIP30StakedBlocks = numeric.NewDecFromBigInt(new(big.Int).Mul(
-		big.NewInt(14*denominations.Intello), big.NewInt(denominations.Intello),
+		big.NewInt(14*denominations.Ticks), big.NewInt(denominations.Ticks),
 	))
 
 	// TotalInitialTokens is the total amount of tokens (in ONE) at block 0 of the network.
@@ -51,7 +51,7 @@ var (
 )
 
 // getPreStakingRewardsFromBlockNumber returns the number of tokens injected into the network
-// in the pre-staking era (epoch < staking epoch) in ATTO.
+// in the pre-staking era (epoch < staking epoch) in TICK.
 //
 // If the block number is > than the last block of an epoch, the last block of the epoch is
 // used for the calculation by default.
@@ -95,7 +95,7 @@ func getPreStakingRewardsFromBlockNumber(id shardingconfig.NetworkID, blockNum *
 //
 // TODO (dm): use first crosslink of all shards to compute rewards on network instead of relying on constants.
 var (
-	totalPreStakingNetworkRewardsInAtto = map[shardingconfig.NetworkID][]*big.Int{
+	totalPreStakingNetworkRewardsInTick = map[shardingconfig.NetworkID][]*big.Int{
 		shardingconfig.MainNet: {
 			// Below are all of the last blocks of pre-staking era for mainnet.
 			getPreStakingRewardsFromBlockNumber(shardingconfig.MainNet, big.NewInt(3375103)),
@@ -118,10 +118,10 @@ var (
 	}
 )
 
-// getTotalPreStakingNetworkRewards in ATTO for given NetworkID
+// getTotalPreStakingNetworkRewards in TICK for given NetworkID
 func getTotalPreStakingNetworkRewards(id shardingconfig.NetworkID) *big.Int {
 	totalRewards := big.NewInt(0)
-	if allRewards, ok := totalPreStakingNetworkRewardsInAtto[id]; ok {
+	if allRewards, ok := totalPreStakingNetworkRewardsInTick[id]; ok {
 		for _, reward := range allRewards {
 			totalRewards = new(big.Int).Add(reward, totalRewards)
 		}
@@ -129,7 +129,7 @@ func getTotalPreStakingNetworkRewards(id shardingconfig.NetworkID) *big.Int {
 	return totalRewards
 }
 
-// GetTotalTokens in the network for all shards in ONE.
+// GetTotalTokens in the network for all shards in ITC.
 // This can only be computed with beaconchain if in staking era.
 // If not in staking era, returns the rewards given out by the start of staking era.
 func GetTotalTokens(chain engine.ChainReader) (numeric.Dec, error) {
@@ -148,7 +148,7 @@ func GetTotalTokens(chain engine.ChainReader) (numeric.Dec, error) {
 	return GetTotalPreStakingTokens().Add(numeric.NewDecFromBigIntWithPrec(stakingRewards, 18)), nil
 }
 
-// GetTotalPreStakingTokens returns the total amount of tokens (in ITC) in the
+// GetTotalPreStakingTokens returns the total amount of tokens (in ONE) in the
 // network at the the last block of the pre-staking era (epoch < staking epoch).
 func GetTotalPreStakingTokens() numeric.Dec {
 	preStakingRewards := numeric.NewDecFromBigIntWithPrec(
@@ -157,7 +157,7 @@ func GetTotalPreStakingTokens() numeric.Dec {
 	return TotalInitialTokens.Add(preStakingRewards)
 }
 
-// SetTotalInitialTokens with the given initial tokens (from genesis in TICKS).
-func SetTotalInitialTokens(initTokensAsTicks *big.Int) {
-	TotalInitialTokens = numeric.NewDecFromBigIntWithPrec(initTokensAsTicks, 18)
+// SetTotalInitialTokens with the given initial tokens (from genesis in TICK).
+func SetTotalInitialTokens(initTokensAsTick *big.Int) {
+	TotalInitialTokens = numeric.NewDecFromBigIntWithPrec(initTokensAsTick, 18)
 }

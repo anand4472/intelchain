@@ -6,28 +6,32 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/intelchain-itc/intelchain/core/rawdb"
+
+	msg_pb "github.com/intelchain-itc/intelchain/api/proto/message"
+	"github.com/intelchain-itc/intelchain/crypto/bls"
+
+	blockfactory "github.com/intelchain-itc/intelchain/block/factory"
+	"github.com/intelchain-itc/intelchain/internal/params"
+	"github.com/intelchain-itc/intelchain/internal/utils"
+
 	common2 "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	bls_core "github.com/intelchain-itc/bls/ffi/go/bls"
-	msg_pb "github.com/intelchain-itc/intelchain/api/proto/message"
-	blockfactory "github.com/intelchain-itc/intelchain/block/factory"
 	"github.com/intelchain-itc/intelchain/core"
-	"github.com/intelchain-itc/intelchain/core/rawdb"
 	"github.com/intelchain-itc/intelchain/core/state"
 	"github.com/intelchain-itc/intelchain/core/vm"
-	"github.com/intelchain-itc/intelchain/crypto/bls"
 	"github.com/intelchain-itc/intelchain/crypto/hash"
 	"github.com/intelchain-itc/intelchain/internal/chain"
 	"github.com/intelchain-itc/intelchain/internal/common"
-	"github.com/intelchain-itc/intelchain/internal/params"
-	"github.com/intelchain-itc/intelchain/internal/utils"
+
+	protobuf "github.com/golang/protobuf/proto"
 	"github.com/intelchain-itc/intelchain/numeric"
 	staking "github.com/intelchain-itc/intelchain/staking/types"
-	protobuf "google.golang.org/protobuf/proto"
 )
 
 var (
-	validatorAddress = common2.Address(common.MustBech32ToAddress("one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy"))
+	validatorAddress = common2.Address(common.MustBech32ToAddress("add_your_validator_address_here"))
 
 	testBLSPubKey    = "30b2c38b1316da91e068ac3bd8751c0901ef6c02a1d58bc712104918302c6ed03d5894671d0c816dad2b4d303320f202"
 	testBLSPrvKey    = "c6d7603520311f7a4e6aac0b26701fc433b75b38df504cd416ef2b900cd66205"

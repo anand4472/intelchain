@@ -2,6 +2,11 @@
 
 set -eu
 
+# This script is used to download latest intelchain node release
+# And run the binary. Many codes are copied from prysm.sh (eth2 client).
+# Downloaded binaries is saved in staging/ directory
+# Use INTELCHAIN_RELEASE to specify a specific release version
+# Example: INTELCHAIN_RELEASE=v3.0.0 ./node.sh INTELCHAIN
 
 INTELCHAIN_SIGNING_KEY=539910B02B5BAC637F6615C9799ACE3A9B83DF60
 DOWNLOAD_URL=https://github.com/intelchain-itc/intelchain/releases/download
@@ -20,13 +25,13 @@ color() {
     printf '\033[%sm%s\033[0m\n' "$@"
 }
 
-# return the INTELCHAIN release version
+# return the intelchain release version
 get_version() {
     if [[ -n ${INTELCHAIN_RELEASE:-} ]]; then
         readonly reason="specified in \$INTELCHAIN_RELEASE"
         readonly intelchain_rel="${INTELCHAIN_RELEASE}"
     else
-        # Find the latest INTELCHAIN release available for download.
+        # Find the latest intelchain release available for download.
         readonly reason="automatically selected latest available release"
         intelchain_rel=$(curl -f -s https://intelchain.network/releases/latest) || (color "31" "Get latest version failed. You may manually download the binaries from Github release page. https://github.com/intelchain-itc/intelchain/releases/" && exit 1)
         readonly intelchain_rel

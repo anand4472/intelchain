@@ -11,10 +11,10 @@ Release:	{{ REL }}
 Summary:	intelchain blockchain validator node program
 
 License:	MIT
-URL:		https://intelchain.org
+URL:		https://intelchain.network
 Source0:	%{name}-%{version}.tar
 BuildArch: x86_64
-Packager: Leo Chen <leo@intelchain.network>
+Packager: Leo Chen <leo@hamrony.one>
 Requires(pre): shadow-utils
 Requires: systemd-rpm-macros jq
 

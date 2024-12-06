@@ -11,7 +11,7 @@ import (
 	internal_common "github.com/intelchain-itc/intelchain/internal/common"
 	"github.com/intelchain-itc/intelchain/itc"
 	"github.com/intelchain-itc/intelchain/rosetta/common"
-	rpc2 "github.com/intelchain-itc/intelchain/rpc/intelchain"
+	rpc2 "github.com/intelchain-itc/intelchain/rpc"
 	"github.com/pkg/errors"
 )
 

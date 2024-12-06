@@ -16,7 +16,7 @@ import (
 	nodeconfig "github.com/intelchain-itc/intelchain/internal/configs/node"
 	"github.com/intelchain-itc/intelchain/itc"
 	"github.com/intelchain-itc/intelchain/rosetta/common"
-	commonRPC "github.com/intelchain-itc/intelchain/rpc/intelchain/common"
+	commonRPC "github.com/intelchain-itc/intelchain/rpc/common"
 	"github.com/intelchain-itc/intelchain/shard"
 )
 

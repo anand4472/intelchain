@@ -278,7 +278,7 @@ func (tx *Transaction) S() *big.Int {
 	return tx.data.S
 }
 
-// Value is the amount of ONE token transfered (in Atto)
+// Value is the amount of ITC token transfered (in Tick)
 func (tx *Transaction) Value() *big.Int {
 	return tx.data.Amount
 }

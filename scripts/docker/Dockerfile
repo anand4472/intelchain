@@ -1,17 +1,14 @@
 ARG GOPATH_DEFAULT=/root/go
 ARG SRC_PATH=src/github.com/intelchain-itc
-ARG BUILD_BRANCH=main
 
-FROM golang:1.22.5-bullseye as builder
+FROM golang:1.19-bullseye as builder
 
 ARG GOPATH_DEFAULT
 ARG SRC_PATH
-ARG BUILD_BRANCH
 
 ENV GOPATH=${GOPATH_DEFAULT}
 ENV GO111MODULE=on
 ENV ITC_PATH=${GOPATH}/${SRC_PATH}
-ENV BRANCH=${BUILD_BRANCH}
 
 ENV PACKAGES libgmp-dev libssl-dev curl git \
 	psmisc dnsutils jq make gcc g++ bash tig tree
@@ -21,7 +18,7 @@ RUN apt-get update && apt-get install -y $PACKAGES --no-install-recommends
 
 WORKDIR ${ITC_PATH}
 
-RUN git clone --branch ${BRANCH} https://github.com/intelchain-itc/intelchain.git intelchain \
+RUN git clone https://github.com/intelchain-itc/intelchain.git intelchain \
   && git clone https://github.com/intelchain-itc/bls.git bls \
   && git clone https://github.com/intelchain-itc/mcl.git mcl \
   && git clone https://github.com/intelchain-itc/go-sdk.git go-sdk
@@ -42,7 +39,6 @@ ARG INTELCHAIN_USER_GID=1000
 ENV INTELCHAIN_HOME=/intelchain
 ENV HOME=${INTELCHAIN_HOME}
 
-# hadolint ignore=DL3018
 RUN apk add --no-cache bash bind-tools tini curl sed \
     && rm -rf /var/cache/apk/* \
     && addgroup -g ${INTELCHAIN_USER_GID} ${INTELCHAIN_USER} \

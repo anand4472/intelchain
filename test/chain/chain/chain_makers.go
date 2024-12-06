@@ -22,14 +22,12 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/trie"
 	"github.com/intelchain-itc/intelchain/core"
 
 	"github.com/intelchain-itc/intelchain/block"
 	blockfactory "github.com/intelchain-itc/intelchain/block/factory"
 	consensus_engine "github.com/intelchain-itc/intelchain/consensus/engine"
 	"github.com/intelchain-itc/intelchain/core/state"
-	"github.com/intelchain-itc/intelchain/core/state/snapshot"
 	"github.com/intelchain-itc/intelchain/core/types"
 	"github.com/intelchain-itc/intelchain/core/vm"
 	"github.com/intelchain-itc/intelchain/internal/params"
@@ -254,7 +252,6 @@ func (cr *fakeChainReader) GetReceiptsByHash(hash common.Hash) types.Receipts   
 func (cr *fakeChainReader) ContractCode(hash common.Hash) ([]byte, error)           { return []byte{}, nil }
 func (cr *fakeChainReader) ValidatorCode(hash common.Hash) ([]byte, error)          { return []byte{}, nil }
 func (cr *fakeChainReader) ReadShardState(epoch *big.Int) (*shard.State, error)     { return nil, nil }
-func (cr *fakeChainReader) TrieDB() *trie.Database                                  { return nil }
 func (cr *fakeChainReader) TrieNode(hash common.Hash) ([]byte, error)               { return []byte{}, nil }
 func (cr *fakeChainReader) ReadValidatorList() ([]common.Address, error)            { return nil, nil }
 func (cr *fakeChainReader) ValidatorCandidates() []common.Address                   { return nil }
@@ -275,9 +272,6 @@ func (cr *fakeChainReader) ReadValidatorInformationAtState(
 }
 func (cr *fakeChainReader) StateAt(root common.Hash) (*state.DB, error) {
 	return nil, nil
-}
-func (cr *fakeChainReader) Snapshots() *snapshot.Tree {
-	return nil
 }
 func (cr *fakeChainReader) ReadValidatorSnapshot(
 	addr common.Address,

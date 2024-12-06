@@ -731,7 +731,7 @@ func createGlobalConfig(hc intelchainconfig.IntelchainConfig) (*nodeconfig.Confi
 	return nodeConfig, nil
 }
 
-func setupChain(hc intelchainconfig.intelchainConfig, nodeConfig *nodeconfig.ConfigType, registry *registry.Registry) *registry.Registry {
+func setupChain(hc intelchainconfig.IntelchainConfig, nodeConfig *nodeconfig.ConfigType, registry *registry.Registry) *registry.Registry {
 
 	// Current node.
 	var chainDBFactory shardchain.DBFactory

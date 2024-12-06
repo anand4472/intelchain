@@ -21,12 +21,12 @@ require (
 	github.com/golangci/golangci-lint v1.22.2
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.5.0
+	github.com/hashicorp/go-version v1.2.0
+	github.com/hashicorp/golang-lru v0.5.5-0.20210104140557-80c98217689d
 	github.com/intelchain-itc/abool v1.0.1
 	github.com/intelchain-itc/bls v0.0.6
 	github.com/intelchain-itc/taggedrlp v0.1.4
 	github.com/intelchain-itc/vdf v1.0.0
-	github.com/hashicorp/go-version v1.2.0
-	github.com/hashicorp/golang-lru v0.5.5-0.20210104140557-80c98217689d
 	github.com/ipfs/go-ds-badger v0.3.0
 	github.com/json-iterator/go v1.1.12
 	github.com/libp2p/go-libp2p v0.27.9

@@ -287,6 +287,8 @@ func getCreateValidatorOperationComponents(
 	}
 
 	// slot public key would be add into
+	// https://github.com/intelchain-itc/intelchain/blob/3a8125666817149eaf9cea7870735e26cfe49c87/rosetta/services/tx_construction.go#L16
+	// see https://github.com/intelchain-itc/intelchain/issues/3431
 
 	components := &OperationComponents{
 		Type:           operation.Type,

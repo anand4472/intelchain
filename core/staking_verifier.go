@@ -217,7 +217,7 @@ const oneThousand = 1000
 const oneHundred = 100
 
 var (
-	oneAsBigInt             = big.NewInt(denominations.One)
+	oneAsBigInt             = big.NewInt(denominations.Itc)
 	minimumDelegation       = new(big.Int).Mul(oneAsBigInt, big.NewInt(oneThousand))
 	minimumDelegationV2     = new(big.Int).Mul(oneAsBigInt, big.NewInt(oneHundred))
 	errDelegationTooSmall   = errors.New("minimum delegation amount for a delegator has to be greater than or equal to 1000 ONE")

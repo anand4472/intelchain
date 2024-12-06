@@ -247,7 +247,7 @@ type Validator struct {
 const MaxBLSPerValidator = 106
 
 var (
-	oneAsBigInt  = big.NewInt(denominations.ITC)
+	oneAsBigInt  = big.NewInt(denominations.Itc)
 	minimumStake = new(big.Int).Mul(oneAsBigInt, big.NewInt(TenThousand))
 )
 

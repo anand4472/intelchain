@@ -16,7 +16,7 @@ import (
 	"github.com/intelchain-itc/intelchain/internal/params"
 	"github.com/intelchain-itc/intelchain/itc"
 	"github.com/intelchain-itc/intelchain/rosetta/common"
-	rpcV2 "github.com/intelchain-itc/intelchain/rpc/intelchain/v2"
+	rpcV2 "github.com/intelchain-itc/intelchain/rpc/v2"
 	"github.com/intelchain-itc/intelchain/staking"
 	stakingTypes "github.com/intelchain-itc/intelchain/staking/types"
 )
@@ -809,7 +809,7 @@ func newSameShardTransferNativeOperations(
 // newNativeOperationsWithGas creates a new operation with the gas fee as the first operation.
 // Note: the gas fee is gasPrice * gasUsed.
 func newNativeOperationsWithGas(
-	gasFeeInATTO *big.Int, accountID *types.AccountIdentifier,
+	gasFeeInTICK *big.Int, accountID *types.AccountIdentifier,
 ) []*types.Operation {
 	return []*types.Operation{
 		{
@@ -823,7 +823,7 @@ func newNativeOperationsWithGas(
 				Metadata: accountID.Metadata,
 			},
 			Amount: &types.Amount{
-				Value:    negativeBigValue(gasFeeInATTO),
+				Value:    negativeBigValue(gasFeeInTICK),
 				Currency: &common.NativeCurrency,
 			},
 		},
@@ -833,7 +833,7 @@ func newNativeOperationsWithGas(
 // newNativeOperationsWithGasNoSubAccount creates a new operation with the gas fee as the first operation.
 // Note: the gas fee is gasPrice * gasUsed.
 func newNativeOperationsWithGasNoSubAccount(
-	gasFeeInATTO *big.Int, accountID *types.AccountIdentifier,
+	gasFeeInTICK *big.Int, accountID *types.AccountIdentifier,
 ) []*types.Operation {
 	return []*types.Operation{
 		{
@@ -847,7 +847,7 @@ func newNativeOperationsWithGasNoSubAccount(
 				Metadata: accountID.Metadata,
 			},
 			Amount: &types.Amount{
-				Value:    negativeBigValue(gasFeeInATTO),
+				Value:    negativeBigValue(gasFeeInTICK),
 				Currency: &common.NativeCurrency,
 			},
 		},

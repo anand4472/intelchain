@@ -54,7 +54,7 @@ function setup() {
 
 function launch_bootnode() {
   echo "launching boot node ..."
-  ${DRYRUN} ${ROOT}/bin/bootnode -port 19876 -rpc_http_port 8888 -rpc_ws_port 8889 -network "localnet" -max_conn_per_ip 100 -force_public true >"${log_folder}"/bootnode.log 2>&1 | tee -a "${LOG_FILE}" &
+  ${DRYRUN} ${ROOT}/bin/bootnode -port 19876 -max_conn_per_ip 100 -force_public true >"${log_folder}"/bootnode.log 2>&1 | tee -a "${LOG_FILE}" &
   sleep 1
   BN_MA=$(grep "BN_MA" "${log_folder}"/bootnode.log | awk -F\= ' { print $2 } ')
   echo "bootnode launched." + " $BN_MA"
@@ -63,8 +63,8 @@ function launch_bootnode() {
 function launch_localnet() {
   launch_bootnode
 
-  unset -v base_args sync_options
-  declare -a base_args args sync_options
+  unset -v base_args
+  declare -a base_args args
 
   if ${VERBOSE}; then
     verbosity=5
@@ -72,39 +72,32 @@ function launch_localnet() {
     verbosity=3
   fi
 
-  base_args=(--log_folder "${log_folder}" --min_peers "${MIN}" --bootnodes "${BN_MA}" --p2p.muxer "yamux" \
-    "--network=$NETWORK" --blspass file:"${ROOT}/.itc/blspass.txt" \
-    "--verbosity=${verbosity}" "--p2p.security.max-conn-per-ip=100")
-  if [ "${LEGACY_SYNC}" == "true" ]; then
-    sync_options=("--dns=true" "--sync=false" "--dns.client=true" "--sync.downloader=false" "--sync.stagedsync=false")
-  else
-    sync_options=("--dns=false" "--sync=true" "--dns.client=false" "--sync.downloader=true" "--sync.stagedsync=true")
-  fi
-
-  base_args+=("${sync_options[@]}")
+  base_args=(--log_folder "${log_folder}" --min_peers "${MIN}" --bootnodes "${BN_MA}" "--network_type=$NETWORK" --blspass file:"${ROOT}/.itc/blspass.txt" "--dns=false" "--verbosity=${verbosity}" "--p2p.security.max-conn-per-ip=100")
   sleep 2
 
   # Start nodes
   i=-1
   while IFS='' read -r line || [[ -n "$line" ]]; do
     i=$((i + 1))
+
     # Read config for i-th node form config file
     IFS=' ' read -r ip port mode bls_key shard node_config <<<"${line}"
     args=("${base_args[@]}" --ip "${ip}" --port "${port}" --key "/tmp/${ip}-${port}.key" --db_dir "${ROOT}/db-${ip}-${port}" "--broadcast_invalid_tx=false")
-    if [[ -z "$ip" || -z "$port" || "${ip:0:1}" == "#" ]]; then
+    if [[ -z "$ip" || -z "$port" || "$ip" == "#" ]]; then
       echo "skip empty line or node or comment"
       continue
     fi
     if [[ $EXPOSEAPIS == "true" ]]; then
       args=("${args[@]}" "--http.ip=0.0.0.0" "--ws.ip=0.0.0.0")
     fi
+
     # Setup BLS key for i-th localnet node
     if [[ ! -e "$bls_key" ]]; then
       args=("${args[@]}" --blskey_file "BLSKEY")
     elif [[ -f "$bls_key" ]]; then
       args=("${args[@]}" --blskey_file "${ROOT}/${bls_key}")
     elif [[ -d "$bls_key" ]]; then
-      args=("${args[@]}" "--consensus.aggregate-sig=false" --blsfolder "${ROOT}/${bls_key}")
+      args=("${args[@]}" --blsfolder "${ROOT}/${bls_key}")
     else
       echo "skipping unknown node"
       continue
@@ -138,7 +131,6 @@ function launch_localnet() {
     esac
 
     # Start the node
-    echo ${DRYRUN} "${ROOT}/bin/intelchain" "${args[@]}" "${extra_args[@]}" 2>&1 | tee -a "${LOG_FILE}"
     ${DRYRUN} "${ROOT}/bin/intelchain" "${args[@]}" "${extra_args[@]}" 2>&1 | tee -a "${LOG_FILE}" &
   done <"${config}"
 }
@@ -160,7 +152,6 @@ USAGE: $ME [OPTIONS] config_file_name [extra args to node]
    -B             don't build the binary
    -v             verbosity in log (default: $VERBOSE)
    -e             expose WS & HTTP ip (default: $EXPOSEAPIS)
-   -L             start localnet in Legace sync mode(default: $LEGACY_SYNC)
 
 This script will build all the binaries and start intelchain and based on the configuration file.
 
@@ -179,9 +170,8 @@ NETWORK=localnet
 VERBOSE=false
 NOBUILD=false
 EXPOSEAPIS=false
-LEGACY_SYNC=false
 
-while getopts "hD:m:s:nBN:veL:" option; do
+while getopts "hD:m:s:nBN:ve" option; do
   case ${option} in
   h) usage ;;
   D) DURATION=$OPTARG ;;
@@ -192,7 +182,6 @@ while getopts "hD:m:s:nBN:veL:" option; do
   N) NETWORK=$OPTARG ;;
   v) VERBOSE=true ;;
   e) EXPOSEAPIS=true ;;
-  L) LEGACY_SYNC=$OPTARG ;;
   *) usage ;;
   esac
 done

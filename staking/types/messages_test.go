@@ -287,11 +287,11 @@ func assertSigsCopy(s1, s2 []bls.SerializedSignature) error {
 
 func cpTestDataSetup() {
 	description := Description{
-		Name:            "Winay",
-		Identity:        "win",
-		Website:         "intelchain.network",
-		SecurityContact: "clbSecurity",
-		Details:         "winDetails",
+		Name:            "Wayne",
+		Identity:        "wen",
+		Website:         "intelchain.network.wen",
+		SecurityContact: "wenSecurity",
+		Details:         "wenDetails",
 	}
 	cr := CommissionRates{
 		Rate:          oneDec,

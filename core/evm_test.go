@@ -31,7 +31,7 @@ func getTestEnvironment(testBankKey ecdsa.PrivateKey) (*BlockChainImpl, *state.D
 	// initialize
 	var (
 		testBankAddress = crypto.PubkeyToAddress(testBankKey.PublicKey)
-		testBankFunds   = new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(40000))
+		testBankFunds   = new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(40000))
 		chainConfig     = params.TestChainConfig
 		blockFactory    = blockfactory.ForTest
 		database        = rawdb.NewMemoryDatabase()
@@ -100,7 +100,7 @@ func TestEVMStaking(t *testing.T) {
 	// add undelegations in epoch0
 	wrapper.Delegations[0].Undelegations = []staking.Undelegation{
 		{
-			Amount: new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(10000)),
+			Amount: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(10000)),
 			Epoch:  common.Big0,
 		},
 	}
@@ -195,7 +195,7 @@ func TestEVMStaking(t *testing.T) {
 	//// migration test - when `to` has one delegation
 	//wrapper, _ = db.ValidatorWrapper(createValidator.ValidatorAddress, false, true)
 	//wrapper.Delegations = append(wrapper.Delegations, staking.NewDelegation(
-	//	migration.To, new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(100))))
+	//	migration.To, new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(100))))
 	//expectedAmount = big.NewInt(0).Add(
 	//	wrapper.Delegations[0].Amount, wrapper.Delegations[1].Amount,
 	//)
@@ -227,12 +227,12 @@ func TestEVMStaking(t *testing.T) {
 	//delegation := staking.NewDelegation(migration.To, big.NewInt(0))
 	//delegation.Undelegations = []staking.Undelegation{
 	//	staking.Undelegation{
-	//		Amount: new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(100)),
+	//		Amount: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(100)),
 	//		Epoch:  common.Big0,
 	//	},
 	//}
 	//wrapper.Delegations[0].Undelegate(
-	//	big.NewInt(0), new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(100)),
+	//	big.NewInt(0), new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(100)),
 	//)
 	//expectedAmount = big.NewInt(0).Add(
 	//	wrapper.Delegations[0].Amount, big.NewInt(0),
@@ -250,7 +250,7 @@ func TestEVMStaking(t *testing.T) {
 	//		Amount:           expectedAmount,
 	//		Undelegations: []staking.Undelegation{
 	//			staking.Undelegation{
-	//				Amount: new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(200)),
+	//				Amount: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(200)),
 	//				Epoch:  common.Big0,
 	//			},
 	//		},
@@ -361,12 +361,12 @@ func sampleCreateValidator(key ecdsa.PrivateKey) staking.CreateValidator {
 			MaxRate:       maxRate,
 			MaxChangeRate: maxChangeRate,
 		},
-		MinSelfDelegation:  new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(10000)),
-		MaxTotalDelegation: new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(20000)),
+		MinSelfDelegation:  new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(10000)),
+		MaxTotalDelegation: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(20000)),
 		ValidatorAddress:   crypto.PubkeyToAddress(key.PublicKey),
 		SlotPubKeys:        []bls.SerializedPublicKey{pub},
 		SlotKeySigs:        []bls.SerializedSignature{sig},
-		Amount:             new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(15000)),
+		Amount:             new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(15000)),
 	}
 }
 
@@ -379,15 +379,15 @@ func sampleEditValidator(key ecdsa.PrivateKey) staking.EditValidator {
 
 	return staking.EditValidator{
 		Description: staking.Description{
-			Name:            "Winay",
-			Identity:        "WinayJadon",
-			Website:         "winay.intelchain.orge",
-			SecurityContact: "Mauro",
+			Name:            "Alice",
+			Identity:        "alice",
+			Website:         "alice.intelchain.network",
+			SecurityContact: "Bob",
 			Details:         "Don't mess with me!!!",
 		},
 		CommissionRate:     &ra,
-		MinSelfDelegation:  new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(10000)),
-		MaxTotalDelegation: new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(20000)),
+		MinSelfDelegation:  new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(10000)),
+		MaxTotalDelegation: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(20000)),
 		SlotKeyToRemove:    nil,
 		SlotKeyToAdd:       &slotKeyToAdd,
 		SlotKeyToAddSig:    &slotKeyToAddSig,
@@ -400,8 +400,8 @@ func sampleDelegate(key ecdsa.PrivateKey) staking.Delegate {
 	return staking.Delegate{
 		DelegatorAddress: address,
 		ValidatorAddress: address,
-		// additional delegation of 1000 ITC
-		Amount: new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(1000)),
+		// additional delegation of 1000 ONE
+		Amount: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(1000)),
 	}
 }
 
@@ -410,8 +410,8 @@ func sampleUndelegate(key ecdsa.PrivateKey) staking.Undelegate {
 	return staking.Undelegate{
 		DelegatorAddress: address,
 		ValidatorAddress: address,
-		// undelegate the delegation of 1000 ITC
-		Amount: new(big.Int).Mul(big.NewInt(denominations.ITC), big.NewInt(1000)),
+		// undelegate the delegation of 1000 ONE
+		Amount: new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(1000)),
 	}
 }
 

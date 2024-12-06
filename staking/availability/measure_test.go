@@ -7,15 +7,14 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/intelchain-itc/intelchain/crypto/bls"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/intelchain-itc/intelchain/crypto/bls"
-	"github.com/intelchain-itc/intelchain/internal/params"
 	"github.com/intelchain-itc/intelchain/numeric"
 	"github.com/intelchain-itc/intelchain/shard"
 	"github.com/intelchain-itc/intelchain/staking/effective"
 	staking "github.com/intelchain-itc/intelchain/staking/types"
-	"github.com/stretchr/testify/require"
 )
 
 func TestBlockSigners(t *testing.T) {
@@ -159,7 +158,7 @@ func TestIncrementValidatorSigningCounts(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := IncrementValidatorSigningCounts(ctx.staked, ctx.state, ctx.signers,
+		if err := IncrementValidatorSigningCounts(nil, ctx.staked, ctx.state, ctx.signers,
 			ctx.missings); err != nil {
 
 			t.Fatal(err)
@@ -189,7 +188,7 @@ func TestComputeCurrentSigning(t *testing.T) {
 		snapWrapper := makeTestWrapper(common.Address{}, test.snapSigned, test.snapToSign)
 		curWrapper := makeTestWrapper(common.Address{}, test.curSigned, test.curToSign)
 
-		computed := ComputeCurrentSigning(&snapWrapper, &curWrapper, false)
+		computed := ComputeCurrentSigning(&snapWrapper, &curWrapper)
 
 		if computed.Signed.Cmp(new(big.Int).SetInt64(test.diffSigned)) != 0 {
 			t.Errorf("test %v: computed signed not expected: %v / %v",
@@ -205,48 +204,7 @@ func TestComputeCurrentSigning(t *testing.T) {
 				i, computed.Percentage, expPct)
 		}
 		if computed.IsBelowThreshold != test.isBelowThreshold {
-			t.Errorf("test %v: computed is below threshold `%v` expected: `%v`",
-				i, computed.IsBelowThreshold, test.isBelowThreshold)
-		}
-	}
-}
-
-func TestComputeCurrentSigningHIP32(t *testing.T) {
-	tests := []struct {
-		snapSigned, curSigned, diffSigned int64
-		snapToSign, curToSign, diffToSign int64
-		pctNum, pctDiv                    int64
-		isBelowThreshold                  bool
-	}{
-		{0, 0, 0, 0, 0, 0, 0, 1, false},
-		{0, 1, 1, 0, 1, 1, 1, 1, false},
-		{0, 2, 2, 0, 3, 3, 2, 3, true},
-		{0, 1, 1, 0, 3, 3, 1, 3, true},
-		{100, 225, 125, 200, 350, 150, 5, 6, false},
-		{100, 200, 100, 200, 350, 150, 2, 3, true},
-		{100, 200, 100, 200, 400, 200, 1, 2, true},
-	}
-	for i, test := range tests {
-		snapWrapper := makeTestWrapper(common.Address{}, test.snapSigned, test.snapToSign)
-		curWrapper := makeTestWrapper(common.Address{}, test.curSigned, test.curToSign)
-
-		computed := ComputeCurrentSigning(&snapWrapper, &curWrapper, true)
-
-		if computed.Signed.Cmp(new(big.Int).SetInt64(test.diffSigned)) != 0 {
-			t.Errorf("test %v: computed signed not expected: %v / %v",
-				i, computed.Signed, test.diffSigned)
-		}
-		if computed.ToSign.Cmp(new(big.Int).SetInt64(test.diffToSign)) != 0 {
-			t.Errorf("test %v: computed to sign not expected: %v / %v",
-				i, computed.ToSign, test.diffToSign)
-		}
-		expPct := numeric.NewDec(test.pctNum).Quo(numeric.NewDec(test.pctDiv))
-		if !computed.Percentage.Equal(expPct) {
-			t.Errorf("test %v: computed percentage not expected: %v / %v",
-				i, computed.Percentage, expPct)
-		}
-		if computed.IsBelowThreshold != test.isBelowThreshold {
-			t.Errorf("test %v: computed is below threshold `%v`, expected: `%v`",
+			t.Errorf("test %v: computed is below threshold not expected: %v / %v",
 				i, computed.IsBelowThreshold, test.isBelowThreshold)
 		}
 	}
@@ -670,22 +628,16 @@ func (state testStateDB) GetCode(addr common.Address, isValidatorCode bool) []by
 }
 
 // testReader is the fake Reader for testing
-type testReader struct {
-	m      map[common.Address]staking.ValidatorWrapper
-	config *params.ChainConfig
-}
+type testReader map[common.Address]staking.ValidatorWrapper
 
 // newTestReader creates an empty test reader
 func newTestReader() testReader {
-	m := make(map[common.Address]staking.ValidatorWrapper)
-	return testReader{
-		m:      m,
-		config: &params.ChainConfig{},
-	}
+	reader := make(testReader)
+	return reader
 }
 
 func (reader testReader) ReadValidatorSnapshot(addr common.Address) (*staking.ValidatorSnapshot, error) {
-	wrapper, ok := reader.m[addr]
+	wrapper, ok := reader[addr]
 	if !ok {
 		return nil, errors.New("not a valid validator address")
 	}
@@ -694,12 +646,8 @@ func (reader testReader) ReadValidatorSnapshot(addr common.Address) (*staking.Va
 	}, nil
 }
 
-func (reader testReader) Config() *params.ChainConfig {
-	return reader.config
-}
-
 func (reader testReader) updateValidatorWrapper(addr common.Address, val *staking.ValidatorWrapper) {
-	reader.m[addr] = *val
+	reader[addr] = *val
 }
 
 func makeTestShardState(numShards, numSlots int) *shard.State {
@@ -776,68 +724,10 @@ func indexesToBitMap(idxs []int, n int) ([]byte, error) {
 	return res, nil
 }
 
-// makeTestWrapper makes test wrapper
 func makeTestWrapper(addr common.Address, numSigned, numToSign int64) staking.ValidatorWrapper {
 	var val staking.ValidatorWrapper
 	val.Address = addr
 	val.Counters.NumBlocksToSign = new(big.Int).SetInt64(numToSign)
 	val.Counters.NumBlocksSigned = new(big.Int).SetInt64(numSigned)
 	return val
-}
-
-type stateValidatorWrapperImpl struct {
-	v   *staking.ValidatorWrapper
-	err error
-}
-
-func (a stateValidatorWrapperImpl) ValidatorWrapper(addr common.Address, sendOriginal bool, copyDelegations bool) (*staking.ValidatorWrapper, error) {
-	return a.v, a.err
-}
-
-func TestUpdateMaxCommissionFee(t *testing.T) {
-	t.Run("0.6 + 0.6 = 1 (100%)", func(t *testing.T) {
-		v1 := stateValidatorWrapperImpl{
-			v: &staking.ValidatorWrapper{
-				Validator: staking.Validator{
-					Commission: staking.Commission{
-						CommissionRates: staking.CommissionRates{
-							MaxChangeRate: numeric.MustNewDecFromStr("0.6"),
-							MaxRate:       numeric.MustNewDecFromStr("0.95"),
-						},
-					},
-				},
-			},
-		}
-
-		err := UpdateMaxCommissionFee(true, v1, common.Address{}, numeric.MustNewDecFromStr("0.6"))
-		require.NoError(t, err)
-		require.Equal(t, "1", v1.v.Commission.CommissionRates.MaxRate.String())
-	})
-
-	t.Run("0.07 + 0.5 = 0.57", func(t *testing.T) {
-		v2 := stateValidatorWrapperImpl{
-			v: &staking.ValidatorWrapper{
-				Validator: staking.Validator{
-					Commission: staking.Commission{
-						CommissionRates: staking.CommissionRates{
-							MaxChangeRate: numeric.MustNewDecFromStr("0.5"),
-							MaxRate:       numeric.MustNewDecFromStr("0"),
-						},
-					},
-				},
-			},
-		}
-		err := UpdateMaxCommissionFee(true, v2, common.Address{}, numeric.MustNewDecFromStr("0.07"))
-		require.NoError(t, err)
-		require.Equal(t, "0.57", v2.v.Commission.CommissionRates.MaxRate.String())
-	})
-
-	t.Run("error", func(t *testing.T) {
-		s := stateValidatorWrapperImpl{
-			v:   &staking.ValidatorWrapper{},
-			err: errors.New("error"),
-		}
-		err := UpdateMaxCommissionFee(true, s, common.Address{}, numeric.MustNewDecFromStr("0.07"))
-		require.Error(t, err)
-	})
 }

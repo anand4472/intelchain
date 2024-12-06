@@ -72,7 +72,7 @@ func (v *stakedVoteWeight) AddNewVote(
 		} else {
 			// Aggregated signature should not contain signatures from keys belonging to different accounts,
 			// to avoid malicious node catching other people's signatures and merge with their own to cause problems.
-			// Intelchain nodes are excluded from this rule.
+			// intelchain nodes are excluded from this rule.
 			if bytes.Compare(signerAddr.Bytes(), voter.EarningAccount[:]) != 0 && !voter.IsIntelchainNode {
 				return nil, errors.Errorf("Multiple signer accounts used in multi-sig: %x, %x", signerAddr.Bytes(), voter.EarningAccount)
 			}

@@ -6,11 +6,11 @@ docker_name="intelchain-localnet-test"
 
 case ${1} in
 run)
-    docker pull intelchainitc/localnet-test
+    docker pull intelchainorg/localnet-test
     docker rm "$docker_name"
     docker run -it --name "$docker_name" \
       -p 9500:9500 -p 9501:9501 -p 9599:9599 -p 9598:9598 -p 9799:9799 -p 9798:9798 -p 9899:9899 -p 9898:9898 \
-      -v "$DIR/../:/go/src/github.com/intelchain-itc/intelchain" intelchainitc/localnet-test -n -k
+      -v "$DIR/../:/go/src/github.com/intelchain-itc/intelchain" intelchainorg/localnet-test -n -k
     ;;
 attach)
     docker exec -it "$docker_name" /bin/bash

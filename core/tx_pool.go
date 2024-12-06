@@ -182,7 +182,7 @@ var DefaultTxPoolConfig = TxPoolConfig{
 	Journal:   "transactions.rlp",
 	Rejournal: time.Hour,
 
-	PriceLimit: 100e9, // 100 Gwei/Nano
+	PriceLimit: 100e9, // 100 Gwei/Intello
 	PriceBump:  1,     // PriceBump is percent, 1% is enough
 
 	AccountSlots: 16,   // --txpool.accountslots
@@ -784,11 +784,11 @@ func (pool *TxPool) validateTx(tx types.PoolTransaction, local bool) error {
 	local = local || pool.locals.contains(from) // account may be local even if the transaction arrived from the network
 	if !local && pool.gasPrice.Cmp(tx.GasPrice()) > 0 {
 		gasPrice := new(big.Float).SetInt64(tx.GasPrice().Int64())
-		gasPrice = gasPrice.Mul(gasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Nano
+		gasPrice = gasPrice.Mul(gasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Intello
 
 		minGasPrice := new(big.Float).SetInt64(pool.gasPrice.Int64())
-		minGasPrice = minGasPrice.Mul(minGasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Nano
-		return errors.WithMessagef(ErrUnderpriced, "transaction gas-price is %.18f ONE; minimum gas price is %.18f ONE", gasPrice, minGasPrice)
+		minGasPrice = minGasPrice.Mul(minGasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Intello
+		return errors.WithMessagef(ErrUnderpriced, "transaction gas-price is %.18f ITC; minimum gas price is %.18f ITC", gasPrice, minGasPrice)
 	}
 	// Ensure the transaction adheres to nonce ordering
 	if pool.currentState.GetNonce(from) > tx.Nonce() {
@@ -1007,7 +1007,7 @@ func (pool *TxPool) add(tx types.PoolTransaction, local bool) (replaced bool, er
 		// If the new transaction is underpriced, don't accept it
 		if !local && pool.priced.Underpriced(tx, pool.locals) {
 			gasPrice := new(big.Float).SetInt64(tx.GasPrice().Int64())
-			gasPrice = gasPrice.Mul(gasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Nano
+			gasPrice = gasPrice.Mul(gasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Intello
 			logger.Debug().
 				Str("hash", hash.Hex()).
 				Str("price", tx.GasPrice().String()).
@@ -1019,7 +1019,7 @@ func (pool *TxPool) add(tx types.PoolTransaction, local bool) (replaced bool, er
 		drop := pool.priced.Discard(pool.all.Count()-int(pool.config.GlobalSlots+pool.config.GlobalQueue-1), pool.locals)
 		for _, tx := range drop {
 			gasPrice := new(big.Float).SetInt64(tx.GasPrice().Int64())
-			gasPrice = gasPrice.Mul(gasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Nano
+			gasPrice = gasPrice.Mul(gasPrice, new(big.Float).SetFloat64(1e-9)) // Gas-price is in Intello
 			pool.removeTx(tx.Hash(), false)
 			underpricedTxCounter.Inc(1)
 			pool.txErrorSink.Add(tx,

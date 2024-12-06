@@ -19,7 +19,7 @@ import (
 	"github.com/intelchain-itc/intelchain/core/vm"
 	"github.com/intelchain-itc/intelchain/crypto/hash"
 	"github.com/intelchain-itc/intelchain/internal/params"
-	pkgworker "github.com/intelchain-itc/intelchain/node/intelchain/worker"
+	pkgworker "github.com/intelchain-itc/intelchain/node/worker"
 )
 
 const (

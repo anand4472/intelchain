@@ -10,7 +10,7 @@ import (
 	"github.com/intelchain-itc/intelchain/internal/utils"
 )
 
-// intelchainConfig contains all the configs user can set for running intelchain binary. Served as the bridge
+// IntelchainConfig contains all the configs user can set for running intelchain binary. Served as the bridge
 // from user set flags to internal node configs. Also user can persist this structure to a toml file
 // to avoid inputting all arguments.
 type IntelchainConfig struct {

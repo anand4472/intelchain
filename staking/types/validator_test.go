@@ -22,7 +22,7 @@ var (
 	itcBLSPub      bls.SerializedPublicKey
 
 	itcBLSPubStr     = "c2962419d9999a87daa134f6d177f9ccabfe168a470587b13dd02ce91d1690a92170e5949d3dbdfc1b13fd7327dbef8c"
-	validatorAddr, _ = common2.Bech32ToAddress("")
+	validatorAddr, _ = common2.Bech32ToAddress("add_your_validator_address_here")
 )
 
 var (
@@ -54,7 +54,7 @@ var (
 	}
 
 	invalidDescription = Description{
-		Name:            "description is too long",
+		Name:            "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongname",
 		Identity:        "jacky@intelchain.network",
 		Website:         "intelchain.network/jacky",
 		SecurityContact: "jacky@intelchain.network",
@@ -262,21 +262,21 @@ func TestUpdateDescription(t *testing.T) {
 			raw: Description{
 				Name:            "Wayne",
 				Identity:        "wen",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network.wen",
 				SecurityContact: "wenSecurity",
 				Details:         "wenDetails",
 			},
 			update: Description{
 				Name:            "Jacky",
 				Identity:        "jw",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network/jacky",
 				SecurityContact: "jacky@intelchain.network",
 				Details:         "Details of Jacky",
 			},
 			expect: Description{
 				Name:            "Jacky",
 				Identity:        "jw",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network/jacky",
 				SecurityContact: "jacky@intelchain.network",
 				Details:         "Details of Jacky",
 			},
@@ -285,7 +285,7 @@ func TestUpdateDescription(t *testing.T) {
 			raw: Description{
 				Name:            "Wayne",
 				Identity:        "wen",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network.wen",
 				SecurityContact: "wenSecurity",
 				Details:         "wenDetails",
 			},
@@ -293,7 +293,7 @@ func TestUpdateDescription(t *testing.T) {
 			expect: Description{
 				Name:            "Wayne",
 				Identity:        "wen",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network.wen",
 				SecurityContact: "wenSecurity",
 				Details:         "wenDetails",
 			},
@@ -302,7 +302,7 @@ func TestUpdateDescription(t *testing.T) {
 			raw: Description{
 				Name:            "Wayne",
 				Identity:        "wen",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network.wen",
 				SecurityContact: "wenSecurity",
 				Details:         "wenDetails",
 			},
@@ -312,7 +312,7 @@ func TestUpdateDescription(t *testing.T) {
 			expect: Description{
 				Name:            "Wayne",
 				Identity:        "wen",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network.wen",
 				SecurityContact: "wenSecurity",
 				Details:         "new details",
 			},
@@ -321,12 +321,12 @@ func TestUpdateDescription(t *testing.T) {
 			raw: Description{
 				Name:            "Wayne",
 				Identity:        "wen",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network.wen",
 				SecurityContact: "wenSecurity",
 				Details:         "wenDetails",
 			},
 			update: Description{
-				Website: "description is too long",
+				Website: "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongwebsite",
 			},
 			expErr: errors.New("exceed Maximum Length website"),
 		},
@@ -366,9 +366,9 @@ func TestDescription_EnsureLength(t *testing.T) {
 		},
 		{
 			desc: Description{
-				Name:            "description is too long",
+				Name:            "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongname",
 				Identity:        "jacky@intelchain.network",
-				Website:         "intelchain.network",
+				Website:         "intelchain.network/jacky",
 				SecurityContact: "jacky@intelchain.network",
 				Details:         "Details of jacky",
 			},
@@ -377,7 +377,7 @@ func TestDescription_EnsureLength(t *testing.T) {
 		{
 			desc: Description{
 				Name:            "Jacky Wang",
-				Identity:        "description is too long",
+				Identity:        "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongidentity",
 				Website:         "intelchain.network/jacky",
 				SecurityContact: "jacky@intelchain.network",
 				Details:         "Details of jacky",
@@ -388,7 +388,7 @@ func TestDescription_EnsureLength(t *testing.T) {
 			desc: Description{
 				Name:            "Jacky Wang",
 				Identity:        "jacky@intelchain.network",
-				Website:         "description is too long",
+				Website:         "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongwebsite",
 				SecurityContact: "jacky@intelchain.network",
 				Details:         "Details of jacky",
 			},
@@ -399,7 +399,7 @@ func TestDescription_EnsureLength(t *testing.T) {
 				Name:            "Jacky Wang",
 				Identity:        "jacky@intelchain.network",
 				Website:         "intelchain.network/jacky",
-				SecurityContact: "description is too long",
+				SecurityContact: "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongcontact",
 				Details:         "Details of jacky",
 			},
 			expErr: errors.New("exceed Maximum Length"),
@@ -410,7 +410,7 @@ func TestDescription_EnsureLength(t *testing.T) {
 				Identity:        "jacky@intelchain.network",
 				Website:         "intelchain.network/jacky",
 				SecurityContact: "jacky@intelchain.network",
-				Details:         "description is too long",
+				Details:         "thisisaverylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongdetail",
 			},
 			expErr: errors.New("exceed Maximum Length for details"),
 		},
@@ -454,7 +454,7 @@ func TestVerifyBLSKeys(t *testing.T) {
 	}
 }
 
-func TestContainsIntelchainBLSKeys(t *testing.T) {
+func TestContainsintelchainBLSKeys(t *testing.T) {
 	pairs := makeBLSPubSigPairs(10)
 	tests := []struct {
 		pubIndexes    []int
@@ -739,9 +739,9 @@ func makeValidValidator() Validator {
 	cr := validCommissionRates
 	c := Commission{cr, big.NewInt(300)}
 	d := Description{
-		Name:     "Winay",
-		Identity: "win",
-		Website:  "intelchain.network",
+		Name:     "Wayne",
+		Identity: "wen",
+		Website:  "intelchain.network.wen",
 		Details:  "best",
 	}
 	v := Validator{

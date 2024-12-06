@@ -81,7 +81,7 @@ func (r *stakingEra) ReadRoundResult() *reward.CompletedRound {
 
 func adjust(amount numeric.Dec) numeric.Dec {
 	return amount.MulTruncate(
-		numeric.NewDecFromBigInt(big.NewInt(denominations.ITC)),
+		numeric.NewDecFromBigInt(big.NewInt(denominations.Itc)),
 	)
 }
 
@@ -128,7 +128,7 @@ func WhatPercentStakedNow(
 	percentage := stakedNow.Quo(stakingReward.TotalInitialTokens.Mul(
 		reward.PercentageForTimeStamp(timestamp),
 	).Add(dole))
-	utils.GetLogger().Info().
+	utils.Logger().Info().
 		Str("so-far-doled-out", dole.String()).
 		Str("staked-percentage", percentage.String()).
 		Str("currently-staked", stakedNow.String()).

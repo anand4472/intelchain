@@ -20,7 +20,7 @@ import (
 
 const (
 	// DefaultGasPrice ..
-	DefaultGasPrice = 100 * denominations.Nano
+	DefaultGasPrice = 100 * denominations.Ticks
 )
 
 // ConstructAPI implements the server.ConstructAPIServicer interface.

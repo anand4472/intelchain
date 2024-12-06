@@ -1,6 +1,6 @@
 package params
 
-// GasTable organizes gas prices for different intelchain phases.
+// GasTable organizes gas prices for different Intelchain phases.
 type GasTable struct {
 	ExtcodeSize uint64
 	ExtcodeCopy uint64
@@ -20,7 +20,7 @@ type GasTable struct {
 	CreateBySuicide uint64
 }
 
-// Variables containing gas prices for different intelchain phases.
+// Variables containing gas prices for different Intelchain phases.
 var (
 	// GasTableR3 contain the gas prices for
 	// the r3 phase.

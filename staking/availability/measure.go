@@ -3,8 +3,9 @@ package availability
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/intelchain-itc/intelchain/core/state"
+
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/intelchain-itc/intelchain/crypto/bls"
 	"github.com/intelchain-itc/intelchain/internal/utils"
 	"github.com/intelchain-itc/intelchain/numeric"
@@ -91,6 +92,7 @@ type signerKind struct {
 }
 
 func bumpCount(
+	bc Reader,
 	state ValidatorState,
 	signers []signerKind,
 	stakedAddrSet map[common.Address]struct{},
@@ -127,18 +129,21 @@ func bumpCount(
 
 // IncrementValidatorSigningCounts ..
 func IncrementValidatorSigningCounts(
+	bc Reader,
 	staked *shard.StakedSlots,
 	state ValidatorState,
 	signers, missing shard.SlotList,
 ) error {
 	return bumpCount(
-		state, []signerKind{{false, missing}, {true, signers}},
+		bc, state, []signerKind{{false, missing}, {true, signers}},
 		staked.LookupSet,
 	)
 }
 
 // ComputeCurrentSigning returns (signed, toSign, quotient, error)
-func ComputeCurrentSigning(snapshot, wrapper *staking.ValidatorWrapper, isHip32 bool) *staking.Computed {
+func ComputeCurrentSigning(
+	snapshot, wrapper *staking.ValidatorWrapper,
+) *staking.Computed {
 	statsNow, snapSigned, snapToSign :=
 		wrapper.Counters,
 		snapshot.Counters.NumBlocksSigned,
@@ -153,9 +158,6 @@ func ComputeCurrentSigning(snapshot, wrapper *staking.ValidatorWrapper, isHip32 
 	)
 
 	if toSign.Cmp(common.Big0) == 0 {
-		if isHip32 {
-			computed.IsBelowThreshold = false
-		}
 		return computed
 	}
 
@@ -206,7 +208,7 @@ func ComputeAndMutateEPOSStatus(
 		return err
 	}
 
-	computed := ComputeCurrentSigning(snapshot.Validator, wrapper, bc.Config().IsHIP32(snapshot.Epoch))
+	computed := ComputeCurrentSigning(snapshot.Validator, wrapper)
 
 	utils.Logger().
 		Info().Msg("check if signing percent is meeting required threshold")
@@ -266,36 +268,26 @@ func UpdateMinimumCommissionFee(
 	return false, nil
 }
 
-type stateValidatorWrapper interface {
-	ValidatorWrapper(addr common.Address, sendOriginal bool, copyDelegations bool) (*staking.ValidatorWrapper, error)
-}
-
 // UpdateMaxCommissionFee makes sure the max-rate is at least higher than the rate + max-rate-change.
-func UpdateMaxCommissionFee(IsTopMaxRate bool, state stateValidatorWrapper, addr common.Address, curRate numeric.Dec) error {
+func UpdateMaxCommissionFee(state *state.DB, addr common.Address, minRate numeric.Dec) (bool, error) {
 	utils.Logger().Info().Msg("begin update max commission fee")
 
 	wrapper, err := state.ValidatorWrapper(addr, true, false)
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	newRate := curRate.Add(wrapper.MaxChangeRate)
+	minMaxRate := minRate.Add(wrapper.MaxChangeRate)
 
-	if IsTopMaxRate {
-		hundredPercent := numeric.NewDec(1)
-		if newRate.GT(hundredPercent) {
-			newRate = hundredPercent
-		}
-	}
-
-	if wrapper.MaxRate.LT(newRate) {
+	if wrapper.MaxRate.LT(minMaxRate) {
 		utils.Logger().Info().
 			Str("addr", addr.Hex()).
 			Str("old max-rate", wrapper.MaxRate.String()).
-			Str("new max-rate", newRate.String()).
+			Str("new max-rate", minMaxRate.String()).
 			Msg("updating max commission rate")
-		wrapper.MaxRate.SetBytes(newRate.Bytes())
+		wrapper.MaxRate.SetBytes(minMaxRate.Bytes())
+		return true, nil
 	}
 
-	return nil
+	return false, nil
 }

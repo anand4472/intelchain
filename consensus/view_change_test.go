@@ -6,6 +6,7 @@ import (
 	"github.com/intelchain-itc/intelchain/crypto/bls"
 
 	bls_core "github.com/intelchain-itc/bls/ffi/go/bls"
+	intelchain_bls "github.com/intelchain-itc/intelchain/crypto/bls"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -84,6 +85,8 @@ func TestGetNextLeaderKeyShouldFailForStandardGeneratedConsensus(t *testing.T) {
 	_, _, consensus, _, err := GenerateConsensusForTesting()
 	assert.NoError(t, err)
 
+	// The below results in: "panic: runtime error: integer divide by zero"
+	// This happens because there's no check for if there are any participants or not in https://github.com/intelchain-itc/intelchain/blob/main/consensus/quorum/quorum.go#L188-L197
 	assert.Panics(t, func() { consensus.getNextLeaderKey(uint64(1), nil) })
 }
 

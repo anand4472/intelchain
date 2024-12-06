@@ -172,7 +172,7 @@ var defaultPrometheusConfig = intelchainconfig.PrometheusConfig{
 	IP:         "0.0.0.0",
 	Port:       9900,
 	EnablePush: false,
-	Gateway:    "https://gateway.intelchian.org",
+	Gateway:    "https://gateway.intelchain.network",
 }
 
 var defaultStagedSyncConfig = intelchainconfig.StagedSyncConfig{

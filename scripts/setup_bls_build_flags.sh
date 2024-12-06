@@ -19,7 +19,7 @@ case "${ITC_PATH+set}" in
    fi
    ;;
 esac
-: ${OPENSSL_DIR="/usr/local/opt/openssl@1.1"}
+: ${OPENSSL_DIR="/opt/homebrew/opt/openssl@1.1"}
 : ${MCL_DIR="${ITC_PATH}/mcl"}
 : ${BLS_DIR="${ITC_PATH}/bls"}
 export CGO_CFLAGS="-I${BLS_DIR}/include -I${MCL_DIR}/include"

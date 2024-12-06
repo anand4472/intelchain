@@ -23,7 +23,7 @@ const (
 	AddressLength = 20
 )
 
-// Address represents the 20 byte address of an Intelchain account.
+// Address represents the 20 byte address of an intelchain account.
 type Address [AddressLength]byte
 
 // BytesToAddress returns Address with value b.
@@ -43,10 +43,10 @@ func BigToAddress(b *big.Int) Address { return BytesToAddress(b.Bytes()) }
 func HexToAddress(s string) Address { return BytesToAddress(utils.FromHex(s)) }
 
 // IsBech32Address verifies whether a string can represent a valid bech32-encoded
-// Intelchain address or not.
+// intelchain address or not.
 func IsBech32Address(s string) bool {
 	hrp, bytes, err := bech32.DecodeAndConvert(s)
-	if err != nil || (hrp != "one" && hrp != "tone") || len(bytes) != AddressLength {
+	if err != nil || (hrp != "itc" && hrp != "titc") || len(bytes) != AddressLength {
 		return false
 	}
 	return true
@@ -184,7 +184,7 @@ func MustBuildBech32Addr(hrp string, addr ethCommon.Address) string {
 	return b32
 }
 
-// Bech32AddressHRP is the human-readable part of the Intelchain address used by
+// Bech32AddressHRP is the human-readable part of the intelchain address used by
 // this process.
 var Bech32AddressHRP = "itc"
 

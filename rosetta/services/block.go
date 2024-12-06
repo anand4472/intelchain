@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/intelchain-itc/intelchain/eth/rpc"
 	"github.com/intelchain-itc/intelchain/itc/tracers"
 
 	"github.com/intelchain-itc/intelchain/core"
@@ -22,6 +21,7 @@ import (
 	"github.com/intelchain-itc/intelchain/core/rawdb"
 	itctypes "github.com/intelchain-itc/intelchain/core/types"
 	"github.com/intelchain-itc/intelchain/core/vm"
+	"github.com/intelchain-itc/intelchain/eth/rpc"
 	"github.com/intelchain-itc/intelchain/itc"
 	"github.com/intelchain-itc/intelchain/rosetta/common"
 	stakingTypes "github.com/intelchain-itc/intelchain/staking/types"

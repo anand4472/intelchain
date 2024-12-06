@@ -56,8 +56,8 @@ var errGenesisNoConfig = errors.New("genesis has no chain configuration")
 const (
 	// GenesisEpoch is the number of the genesis epoch.
 	GenesisEpoch = 0
-	// GenesisITCToken is the initial total number of ITC in the genesis block for mainnet.
-	GenesisITCToken = 95000000000
+	// GenesisONEToken is the initial total number of ONE in the genesis block for mainnet.
+	GenesisONEToken = 12600000000
 	// ContractDeployerInitFund is the initial fund for the contract deployer account in testnet/devnet.
 	ContractDeployerInitFund = 10000000000
 	// InitFreeFund is the initial fund for permissioned accounts for testnet/devnet/
@@ -65,8 +65,8 @@ const (
 )
 
 var (
-	// GenesisFund is the initial total number of ITC (in ticks) in the genesis block for mainnet.
-	GenesisFund = new(big.Int).Mul(big.NewInt(GenesisITCToken), big.NewInt(denominations.ITC))
+	// GenesisFund is the initial total number of ITC (in Tick) in the genesis block for mainnet.
+	GenesisFund = new(big.Int).Mul(big.NewInt(GenesisONEToken), big.NewInt(denominations.Itc))
 )
 
 // Genesis specifies the header fields, state of a genesis block. It also defines hard
@@ -131,7 +131,7 @@ func NewGenesisSpec(netType nodeconfig.NetworkType, shardID uint32) *Genesis {
 		contractDeployerAddress := crypto.PubkeyToAddress(contractDeployerKey.PublicKey)
 		contractDeployerFunds := big.NewInt(ContractDeployerInitFund)
 		contractDeployerFunds = contractDeployerFunds.Mul(
-			contractDeployerFunds, big.NewInt(denominations.ITC),
+			contractDeployerFunds, big.NewInt(denominations.Itc),
 		)
 		genesisAlloc[contractDeployerAddress] = GenesisAccount{Balance: contractDeployerFunds}
 
@@ -150,7 +150,7 @@ func NewGenesisSpec(netType nodeconfig.NetworkType, shardID uint32) *Genesis {
 		ShardID:   shardID,
 		GasLimit:  gasLimit,
 		Timestamp: 1561734000, // GMT: Friday, June 28, 2019 3:00:00 PM. PST: Friday, June 28, 2019 8:00:00 AM
-		ExtraData: []byte("Intelchain: A fast and secure blockchain consensus protocol."),
+		ExtraData: []byte("Intelchain: A fast and Secure consensus protocol."),
 	}
 }
 

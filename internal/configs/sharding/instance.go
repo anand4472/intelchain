@@ -88,7 +88,7 @@ func NewInstance(
 	if intelchainVotePercent.LT(numeric.ZeroDec()) ||
 		intelchainVotePercent.GT(numeric.OneDec()) {
 		return nil, errors.Errorf("" +
-			"total voting power of Intelchain nodes should be within [0, 1]",
+			"total voting power of intelchain nodes should be within [0, 1]",
 		)
 	}
 	if len(feeCollectors) > 0 {

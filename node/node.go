@@ -1068,7 +1068,7 @@ func New(
 	if consensusObj == nil {
 		panic("consensusObj is nil")
 	}
-	// Get the node config that's created in the Intelchain.go program.
+	// Get the node config that's created in the intelchain.go program.
 	node.NodeConfig = nodeconfig.GetShardConfig(consensusObj.ShardID)
 	node.IntelchainConfig = intelchainconfig
 

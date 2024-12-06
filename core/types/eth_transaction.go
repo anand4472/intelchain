@@ -145,7 +145,7 @@ func (tx *EthTransaction) S() *big.Int {
 	return tx.data.S
 }
 
-// Value is the amount of ONE token transfered (in Atto)
+// Value is the amount of ITC token transfered (in Tick)
 func (tx *EthTransaction) Value() *big.Int {
 	return tx.data.Amount
 }
@@ -193,7 +193,7 @@ func (tx *EthTransaction) Copy() *EthTransaction {
 	return &tx2
 }
 
-// ConvertToItc converts eth txn to itc txn by filling in ShardID and ToShardID fields.
+// ConvertToItc converts eth txn to Itc txn by filling in ShardID and ToShardID fields.
 func (tx *EthTransaction) ConvertToItc() *Transaction {
 	var tx2 Transaction
 	d := &tx.data

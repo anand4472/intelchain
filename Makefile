@@ -1,7 +1,7 @@
 TOP:=$(realpath ..)
-export CGO_CFLAGS:=-I$(TOP)/bls/include -I$(TOP)/mcl/include -I/usr/local/opt/openssl@1.1/include
-export CGO_LDFLAGS:=-L$(TOP)/bls/lib -L/usr/local/opt/openssl@1.1/lib
-export LD_LIBRARY_PATH:=$(TOP)/bls/lib:$(TOP)/mcl/lib:/usr/local/opt/openssl@1.1/lib:/usr/local/opt/gmp/lib/:/usr/local/opt/openssl@1.1/lib
+export CGO_CFLAGS:=-I$(TOP)/bls/include -I$(TOP)/mcl/include -I/opt/homebrew/opt/openssl@1.1/include
+export CGO_LDFLAGS:=-L$(TOP)/bls/lib -L/opt/homebrew/opt/openssl@1.1/lib
+export LD_LIBRARY_PATH:=$(TOP)/bls/lib:$(TOP)/mcl/lib:/opt/homebrew/opt/openssl@1.1/lib:/opt/homebrew/opt/gmp/lib/:/opt/homebrew/opt/openssl@1.1/lib
 export LIBRARY_PATH:=$(LD_LIBRARY_PATH)
 export DYLD_FALLBACK_LIBRARY_PATH:=$(LD_LIBRARY_PATH)
 export GO111MODULE:=on
@@ -164,7 +164,7 @@ go-test:
 	go test -vet=all -race ./...
 
 docker:
-	docker build --pull -t intelchainitc/$(PKGNAME):latest -f scripts/docker/Dockerfile .
+	docker build --pull -t intelchainorg/$(PKGNAME):latest -f scripts/docker/Dockerfile .
 
 travis_go_checker:
 	bash ./scripts/travis_go_checker.sh

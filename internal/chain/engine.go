@@ -339,7 +339,7 @@ func (e *engineImpl) Finalize(
 		// is designed for staking decimals and not
 		// ONE balances so we use big.Int for this math
 		remainderOne := new(big.Int).Div(
-			remainder.Int, big.NewInt(denominations.One),
+			remainder.Int, big.NewInt(denominations.Itc),
 		)
 		// this goes directly to the balance (on shard 0, of course)
 		// because the reward mechanism isn't built to handle

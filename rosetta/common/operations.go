@@ -8,7 +8,7 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 
-	rpcV2 "github.com/intelchain-itc/intelchain/rpc/intelchain/v2"
+	rpcV2 "github.com/intelchain-itc/intelchain/rpc/v2"
 	staking "github.com/intelchain-itc/intelchain/staking/types"
 )
 

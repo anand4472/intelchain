@@ -9,7 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 
 	itctypes "github.com/intelchain-itc/intelchain/core/types"
-	rpcV2 "github.com/intelchain-itc/intelchain/rpc/intelchain/v2"
+	rpcV2 "github.com/intelchain-itc/intelchain/rpc/v2"
 	stakingTypes "github.com/intelchain-itc/intelchain/staking/types"
 )
 
