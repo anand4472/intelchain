@@ -138,7 +138,7 @@ func NewGenesisSpec(netType nodeconfig.NetworkType, shardID uint32) *Genesis {
 		// Localnet only testing account
 		if netType == nodeconfig.Localnet {
 			// PK: 1f84c95ac16e6a50f08d44c7bde7aff8742212fda6e4321fde48bf83bef266dc
-			testAddress := common.HexToAddress("0xA5241513DA9F4463F1d4874b548dFBAC29D91f34")
+			testAddress := common.HexToAddress("0x87Df32d9d6Bb1298A378D186Dce32c4885102105")
 			genesisAlloc[testAddress] = GenesisAccount{Balance: contractDeployerFunds}
 		}
 	}
