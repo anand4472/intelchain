@@ -108,7 +108,7 @@ Note that the directory structure for `/root/data` (== `./data`) should look som
 ``` 
 
 ### Inspecting Logs
-If you mount `./data` on the host to `/root/data` in the container, you van view the intelchain node logs at
+If you mount `./data` on the host to `/root/data` in the container, you can view the intelchain node logs at
 `./data/logs/` on your host machine.
 
 ### View rosetta request logs

@@ -189,7 +189,7 @@ func (sc instance) FeeCollectors() FeeCollectors {
 	return sc.feeCollectors
 }
 
-// IntelchainVotePercent returns total percentage of voting power Intelchain nodes possess.
+// IntelchainVotePercent returns total percentage of voting power intelchain nodes possess.
 func (sc instance) IntelchainVotePercent() numeric.Dec {
 	return sc.intelchainVotePercent
 }
@@ -210,7 +210,7 @@ func (sc instance) NumIntelchainOperatedNodesPerShard() int {
 	return sc.numIntelchainOperatedNodesPerShard
 }
 
-// ItcAccounts returns the list of Intelchain accounts
+// itcAccounts returns the list of Intelchain accounts
 func (sc instance) ItcAccounts() []genesis.DeployAccount {
 	return sc.itcAccounts
 }

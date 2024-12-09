@@ -9,7 +9,7 @@ import (
 	"github.com/intelchain-itc/intelchain/itc"
 )
 
-// PublicLegacyService provides an API to access the Intelchain blockchain.
+// PublicLegacyService provides an API to access the intelchain blockchain.
 // Services here are legacy methods, specific to the V1 RPC that can be deprecated in the future.
 type PublicLegacyService struct {
 	itc *itc.Intelchain
@@ -29,7 +29,7 @@ func NewPublicLegacyAPI(itc *itc.Intelchain, namespace string) rpc.API {
 	}
 }
 
-// GetBalance returns the amount of TICK for the given address in the state of the
+// GetBalance returns the amount of Atto for the given address in the state of the
 // given block number. The rpc.LatestBlockNumber and rpc.PendingBlockNumber meta
 // block numbers are also allowed.
 func (s *PublicLegacyService) GetBalance(

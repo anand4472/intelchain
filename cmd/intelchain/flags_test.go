@@ -1409,8 +1409,8 @@ func TestGPOFlags(t *testing.T) {
 				Blocks:            5,
 				Transactions:      1,
 				Percentile:        2,
-				DefaultPrice:      101 * denominations.Ticks,
-				MaxPrice:          400 * denominations.Ticks,
+				DefaultPrice:      101 * denominations.Nano,
+				MaxPrice:          400 * denominations.Nano,
 				LowUsageThreshold: 60,
 				BlockGasLimit:     10_000_000,
 			},
@@ -1455,7 +1455,7 @@ func TestDevnetFlags(t *testing.T) {
 			},
 		},
 		{
-			args: []string{"--dn_num_shards", "3", "--dn_shard_size", "100", "--dn_itc_size",
+			args: []string{"--dn_num_shards", "3", "--dn_shard_size", "100", "--dn_Itc_size",
 				"60"},
 			expConfig: &intelchainconfig.DevnetConfig{
 				NumShards:   3,

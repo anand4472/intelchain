@@ -77,7 +77,7 @@ type ParticipantTracker interface {
 	ParticipantsCount() int64
 	// NthNextValidator returns key for next validator. It assumes external validators and leader rotation.
 	NthNextValidator(slotList shard.SlotList, pubKey *bls.PublicKeyWrapper, next int) (bool, *bls.PublicKeyWrapper)
-	NthNextItc(shardingconfig.Instance, *bls.PublicKeyWrapper, int) (bool, *bls.PublicKeyWrapper)
+	NthNextItc(instance shardingconfig.Instance, pubkey *bls.PublicKeyWrapper, next int) (bool, *bls.PublicKeyWrapper)
 	NthNextItcExt(shardingconfig.Instance, *bls.PublicKeyWrapper, int) (bool, *bls.PublicKeyWrapper)
 	FirstParticipant(shardingconfig.Instance) *bls.PublicKeyWrapper
 	UpdateParticipants(pubKeys, allowlist []bls.PublicKeyWrapper)

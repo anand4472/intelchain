@@ -1,5 +1,5 @@
 # Introduction
-This document introduces the intelchain's package release using standard packaging system, RPM and Deb packages.
+This document introduces the Intelchain's package release using standard packaging system, RPM and Deb packages.
 
 Standard packaging system has many benefits, like extensive tooling, documentation, portability, and complete design to handle different situation.
 
@@ -19,7 +19,7 @@ The default blockchain DBs are stored in `/home/intelchain/intelchain_db_?` dire
 The configuration of intelchain process is in `/etc/intelchain/intelchain.conf`.
 
 # Package Manager
-Please take sometime to learn about the package managers used on Fedora/Debian based distributions.
+Please take some time to learn about the package managers used on Fedora/Debian based distributions.
 There are many other package managers can be used to manage rpm/deb packages like [Apt]<https://en.wikipedia.org/wiki/APT_(software)>,
 or [Yum]<https://www.redhat.com/sysadmin/how-manage-packages>
 
@@ -128,7 +128,7 @@ The default configuration is for validators on mainnet. No need to run `intelcha
 * `systemctl status intelchain` to check status of node
 
 # Change node configuration
-The node configuration file is in `/etc/intelchain/intelchain.conf`.  Please edit the file as you needed.
+The node configuration file is in `/etc/intelchain/intelchain.conf`.  Please edit the file as you need.
 ```bash
 sudo vim /etc/intelchain/intelchain.conf
 ```

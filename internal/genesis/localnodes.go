@@ -2,8 +2,8 @@ package genesis
 
 // LocalIntelchainAccounts are the accounts for the initial genesis nodes used for local test.
 var LocalIntelchainAccounts = []DeployAccount{
-	{Index: " 0 ", Address: "", BLSPublicKey: ""},
-	{Index: " 1 ", Address: "", BLSPublicKey: ""},
+	{Index: "0", Address: "", BLSPublicKey: ""},
+	{Index: "1", Address: "", BLSPublicKey: ""},
 }
 
 // LocalFnAccounts are the accounts for the initial FN used for local test.

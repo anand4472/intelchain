@@ -192,6 +192,7 @@ var defaultStagedSyncConfig = intelchainconfig.StagedSyncConfig{
 var (
 	defaultMainnetSyncConfig = intelchainconfig.SyncConfig{
 		Enabled:              false,
+		SyncMode:             0,
 		Downloader:           false,
 		StagedSync:           false,
 		StagedSyncCfg:        defaultStagedSyncConfig,
@@ -207,6 +208,7 @@ var (
 
 	defaultTestNetSyncConfig = intelchainconfig.SyncConfig{
 		Enabled:              true,
+		SyncMode:             0,
 		Downloader:           false,
 		StagedSync:           false,
 		StagedSyncCfg:        defaultStagedSyncConfig,
@@ -222,6 +224,7 @@ var (
 
 	defaultLocalNetSyncConfig = intelchainconfig.SyncConfig{
 		Enabled:              true,
+		SyncMode:             0,
 		Downloader:           true,
 		StagedSync:           true,
 		StagedSyncCfg:        defaultStagedSyncConfig,
@@ -237,6 +240,7 @@ var (
 
 	defaultPartnerSyncConfig = intelchainconfig.SyncConfig{
 		Enabled:              true,
+		SyncMode:             0,
 		Downloader:           true,
 		StagedSync:           false,
 		StagedSyncCfg:        defaultStagedSyncConfig,
@@ -252,6 +256,7 @@ var (
 
 	defaultElseSyncConfig = intelchainconfig.SyncConfig{
 		Enabled:              true,
+		SyncMode:             0,
 		Downloader:           true,
 		StagedSync:           false,
 		StagedSyncCfg:        defaultStagedSyncConfig,

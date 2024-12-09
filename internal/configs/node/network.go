@@ -19,7 +19,7 @@ var (
 	}
 
 	stressBootNodes = []string{
-		"/dnsaddr/bootstrap.stn.hmny.io",
+		"/dnsaddr/bootstrap.stn.intelchain.network",
 	}
 
 	devnetBootNodes = []string{}
@@ -28,9 +28,9 @@ var (
 const (
 	mainnetDNSZone   = "t.intelchain.network"
 	testnetDNSZone   = "b.intelchain.network"
-	pangaeaDNSZone   = "os.hmny.io"
+	pangaeaDNSZone   = "os.intelchain.network"
 	partnerDNSZone   = "ps.intelchain.network"
-	stressnetDNSZone = "stn.hmny.io"
+	stressnetDNSZone = "stn.intelchain.network"
 )
 
 const (

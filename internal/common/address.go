@@ -46,7 +46,7 @@ func HexToAddress(s string) Address { return BytesToAddress(utils.FromHex(s)) }
 // intelchain address or not.
 func IsBech32Address(s string) bool {
 	hrp, bytes, err := bech32.DecodeAndConvert(s)
-	if err != nil || (hrp != "itc" && hrp != "titc") || len(bytes) != AddressLength {
+	if err != nil || (hrp != "one" && hrp != "tone") || len(bytes) != AddressLength {
 		return false
 	}
 	return true

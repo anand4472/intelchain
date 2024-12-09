@@ -28,7 +28,7 @@ func NewPublicEthService(itc *itc.Intelchain, namespace string) rpc.API {
 	}
 }
 
-// GetBalance returns the amount of TICK for the given address in the state of the
+// GetBalance returns the amount of Atto for the given address in the state of the
 // given block number. The rpc.LatestBlockNumber and rpc.PendingBlockNumber meta
 // block numbers are also allowed.
 func (s *PublicEthService) GetBalance(

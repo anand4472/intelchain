@@ -62,7 +62,7 @@ var ParseStakeMsgTests = []parseTest{
 		expected: &stakingTypes.Delegate{
 			DelegatorAddress: common.HexToAddress("0x1337"),
 			ValidatorAddress: common.HexToAddress("0x1338"),
-			Amount:           new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(100)),
+			Amount:           new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(100)),
 		},
 		name: "delegateSuccess",
 	},
@@ -82,7 +82,7 @@ var ParseStakeMsgTests = []parseTest{
 		expected: &stakingTypes.Undelegate{
 			DelegatorAddress: common.HexToAddress("0x1337"),
 			ValidatorAddress: common.HexToAddress("0x1338"),
-			Amount:           new(big.Int).Mul(big.NewInt(denominations.Itc), big.NewInt(100)),
+			Amount:           new(big.Int).Mul(big.NewInt(denominations.One), big.NewInt(100)),
 		},
 		name: "undelegateSuccess",
 	},

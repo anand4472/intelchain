@@ -10,7 +10,7 @@ import (
 	"github.com/intelchain-itc/intelchain/internal/utils"
 )
 
-// IntelchainConfig contains all the configs user can set for running intelchain binary. Served as the bridge
+// IntelchainConfig contains all the configs user can set for running Intelchain binary. Served as the bridge
 // from user set flags to internal node configs. Also user can persist this structure to a toml file
 // to avoid inputting all arguments.
 type IntelchainConfig struct {
@@ -329,6 +329,7 @@ type PrometheusConfig struct {
 type SyncConfig struct {
 	// TODO: Remove this bool after stream sync is fully up.
 	Enabled              bool             // enable the stream sync protocol
+	SyncMode             uint32           // sync mode (default:Full sync, 1: Fast Sync, 2: Snap Sync(not implemented yet))
 	Downloader           bool             // start the sync downloader client
 	StagedSync           bool             // use staged sync
 	StagedSyncCfg        StagedSyncConfig // staged sync configurations

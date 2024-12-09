@@ -14,28 +14,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/intelchain-itc/intelchain/consensus/quorum"
-	"github.com/intelchain-itc/intelchain/internal/chain"
-	"github.com/intelchain-itc/intelchain/internal/registry"
-	"github.com/intelchain-itc/intelchain/internal/shardchain/tikv_manage"
-	"github.com/intelchain-itc/intelchain/internal/tikv/redis_helper"
-	"github.com/intelchain-itc/intelchain/internal/tikv/statedb_cache"
-
-	"github.com/intelchain-itc/intelchain/api/service/crosslink_sending"
-	rosetta_common "github.com/intelchain-itc/intelchain/rosetta/common"
-
-	intelchainconfig "github.com/intelchain-itc/intelchain/internal/configs/intelchain"
-	rpc_common "github.com/intelchain-itc/intelchain/rpc/common"
-
 	ethCommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/log"
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
-
 	"github.com/intelchain-itc/bls/ffi/go/bls"
-
 	"github.com/intelchain-itc/intelchain/api/service"
+	"github.com/intelchain-itc/intelchain/api/service/crosslink_sending"
 	"github.com/intelchain-itc/intelchain/api/service/pprof"
 	"github.com/intelchain-itc/intelchain/api/service/prometheus"
 	"github.com/intelchain-itc/intelchain/api/service/stagedstreamsync"
@@ -43,22 +27,33 @@ import (
 	"github.com/intelchain-itc/intelchain/common/fdlimit"
 	"github.com/intelchain-itc/intelchain/common/ntp"
 	"github.com/intelchain-itc/intelchain/consensus"
+	"github.com/intelchain-itc/intelchain/consensus/quorum"
 	"github.com/intelchain-itc/intelchain/core"
+	"github.com/intelchain-itc/intelchain/internal/chain"
 	"github.com/intelchain-itc/intelchain/internal/cli"
 	"github.com/intelchain-itc/intelchain/internal/common"
+	intelchainconfig "github.com/intelchain-itc/intelchain/internal/configs/intelchain"
 	nodeconfig "github.com/intelchain-itc/intelchain/internal/configs/node"
 	shardingconfig "github.com/intelchain-itc/intelchain/internal/configs/sharding"
 	"github.com/intelchain-itc/intelchain/internal/genesis"
 	"github.com/intelchain-itc/intelchain/internal/params"
+	"github.com/intelchain-itc/intelchain/internal/registry"
 	"github.com/intelchain-itc/intelchain/internal/shardchain"
+	"github.com/intelchain-itc/intelchain/internal/shardchain/tikv_manage"
+	"github.com/intelchain-itc/intelchain/internal/tikv/redis_helper"
+	"github.com/intelchain-itc/intelchain/internal/tikv/statedb_cache"
 	"github.com/intelchain-itc/intelchain/internal/utils"
 	"github.com/intelchain-itc/intelchain/itc/downloader"
 	"github.com/intelchain-itc/intelchain/multibls"
 	"github.com/intelchain-itc/intelchain/node"
 	"github.com/intelchain-itc/intelchain/numeric"
 	"github.com/intelchain-itc/intelchain/p2p"
+	rosetta_common "github.com/intelchain-itc/intelchain/rosetta/common"
+	rpc_common "github.com/intelchain-itc/intelchain/rpc/common"
 	"github.com/intelchain-itc/intelchain/shard"
 	"github.com/intelchain-itc/intelchain/webhooks"
+	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
 )
 
 // Host
@@ -788,6 +783,8 @@ func setupChain(hc intelchainconfig.IntelchainConfig, nodeConfig *nodeconfig.Con
 }
 
 func setupConsensusAndNode(hc intelchainconfig.IntelchainConfig, nodeConfig *nodeconfig.ConfigType, registry *registry.Registry) *node.Node {
+	decider := quorum.NewDecider(quorum.SuperMajorityVote, uint32(hc.General.ShardID))
+
 	// Parse minPeers from intelchainconfig.IntelchainConfig
 	var minPeers int
 	var aggregateSig bool
@@ -821,7 +818,6 @@ func setupConsensusAndNode(hc intelchainconfig.IntelchainConfig, nodeConfig *nod
 	registry.SetCxPool(cxPool)
 
 	// Consensus object.
-	decider := quorum.NewDecider(quorum.SuperMajorityVote, nodeConfig.ShardID)
 	registry.SetIsBackup(isBackup(hc))
 	currentConsensus, err := consensus.New(
 		myHost, nodeConfig.ShardID, nodeConfig.ConsensusPriKey, registry, decider, minPeers, aggregateSig)
@@ -866,7 +862,7 @@ func setupConsensusAndNode(hc intelchainconfig.IntelchainConfig, nodeConfig *nod
 	currentNode.NodeConfig.ConsensusPriKey = nodeConfig.ConsensusPriKey
 
 	// This needs to be executed after consensus setup
-	if err := currentNode.InitConsensusWithValidators(); err != nil {
+	if err := currentConsensus.InitConsensusWithValidators(); err != nil {
 		utils.Logger().Warn().
 			Int("shardID", hc.General.ShardID).
 			Err(err).
@@ -1009,6 +1005,7 @@ func setupStagedSyncService(node *node.Node, host p2p.Host, hc intelchainconfig.
 
 	sConfig := stagedstreamsync.Config{
 		ServerOnly:           !hc.Sync.Downloader,
+		SyncMode:             stagedstreamsync.SyncMode(hc.Sync.SyncMode),
 		Network:              nodeconfig.NetworkType(hc.Network.NetworkType),
 		Concurrency:          hc.Sync.Concurrency,
 		MinStreams:           hc.Sync.MinPeers,
@@ -1020,7 +1017,7 @@ func setupStagedSyncService(node *node.Node, host p2p.Host, hc intelchainconfig.
 		SmDiscBatch:          hc.Sync.DiscBatch,
 		UseMemDB:             hc.Sync.StagedSyncCfg.UseMemDB,
 		LogProgress:          hc.Sync.StagedSyncCfg.LogProgress,
-		DebugMode:            hc.Sync.StagedSyncCfg.DebugMode,
+		DebugMode:            true, // hc.Sync.StagedSyncCfg.DebugMode,
 	}
 
 	// If we are running side chain, we will need to do some extra works for beacon

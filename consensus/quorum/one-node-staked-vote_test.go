@@ -48,7 +48,7 @@ func generateRandomSlot() (shard.Slot, bls_core.SecretKey) {
 	return shard.Slot{EcdsaAddress: addr, BLSPublicKey: key, EffectiveStake: &stake}, secretKey
 }
 
-// 50 Intelchain Nodes, 50 Staked Nodes
+// 50 intelchain Nodes, 50 Staked Nodes
 func setupBaseCase() (Decider, *TallyResult, shard.SlotList, map[string]secretKeyMap) {
 	slotList := shard.SlotList{}
 	sKeys := map[string]secretKeyMap{}
@@ -81,7 +81,7 @@ func setupBaseCase() (Decider, *TallyResult, shard.SlotList, map[string]secretKe
 	return decider, tally, slotList, sKeys
 }
 
-// 33 Intelchain Nodes, 67 Staked Nodes
+// 33 intelchain Nodes, 67 Staked Nodes
 func setupEdgeCase() (Decider, *TallyResult, shard.SlotList, secretKeyMap) {
 	slotList := shard.SlotList{}
 	sKeys := secretKeyMap{}
@@ -136,7 +136,7 @@ func TestQuorumThreshold(t *testing.T) {
 
 func TestEvenNodes(t *testing.T) {
 	stakedVote, result, _, sKeys := setupBaseCase()
-	// Check IntelchainPercent + StakePercent == 1
+	// Check intelchainPercent + StakePercent == 1
 	sum := result.ourPercent.Add(result.theirPercent)
 	if !sum.Equal(numeric.OneDec()) {
 		t.Errorf("Total voting power does not equal 1. Intelchain voting power: %s, Staked voting power: %s, Sum: %s",

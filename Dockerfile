@@ -68,13 +68,13 @@ RUN scripts/go_executable_build.sh -S
 
 RUN cd ${ITC_PATH}/go-sdk && make -j8 && cp itc /root/bin
 
-ARG K1=
-ARG K2=
-ARG K3=
+ARG K1=one1tq4hy947c9gr8qzv06yxz4aeyhc9vn78al4rmu
+ARG K2=one1y5gmmzumajkm5mx3g2qsxtza2d3haq0zxyg47r
+ARG K3=one1qrqcfek6sc29sachs3glhs4zny72mlad76lqcp
 
-ARG KS1=
-ARG KS2=
-ARG KS3=
+ARG KS1=8d222cffa99eb1fb86c581d9dfe7d60dd40ec62aa29056b7ff48028385270541
+ARG KS2=da1800da5dedf02717696675c7a7e58383aff90b1014dfa1ab5b7bd1ce3ef535
+ARG KS3=f4267bb5a2f0e65b8f5792bb6992597fac2b35ebfac9885ce0f4152c451ca31a
 
 RUN itc keys import-private-key ${KS1} && \
 	itc keys import-private-key ${KS2} && \
