@@ -46,9 +46,6 @@ bc_config.json
 # leveldb local storage
 db/
 
-# intelchain node keystore
-.itckey
-
 # staking keystore
 .stakingkey
 
@@ -66,9 +63,6 @@ node_modules/
 
 # bnkey
 test/.bnkey
-
-# exported keys
-.itc/*.key
 
 # blspass
 blspass.txt
@@ -88,9 +82,6 @@ coverage.txt
 # testdata directory
 intelchain_db_*
 explorer_storage_*
-
-# local blskeys for testing
-.itc/blskeys
 
 # pprof profiles
 profiles/*.pb.gz
