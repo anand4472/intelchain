@@ -1,8 +1,8 @@
 package denominations
 
-// ITC Units
+// ONE Units
 const (
-	Tick  = 1
-	Ticks = 1e9
-	Itc   = 1e18
+	Atto = 1
+	Nano = 1e9
+	One  = 1e18
 )

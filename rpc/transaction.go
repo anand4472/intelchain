@@ -30,7 +30,7 @@ const (
 	defaultPageSize = uint32(100)
 )
 
-// PublicTransactionService provides an API to access Intelchain's transaction service.
+// PublicTransactionService provides an API to access intelchain's transaction service.
 // It offers only methods that operate on public data that is freely available to anyone.
 type PublicTransactionService struct {
 	itc     *itc.Intelchain

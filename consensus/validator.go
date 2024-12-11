@@ -65,7 +65,7 @@ func (consensus *Consensus) onAnnounce(msg *msg_pb.Message) {
 			_, err := consensus.ValidateNewBlock(recvMsg)
 			if err == nil {
 				consensus.GetLogger().Info().
-					Msg("[Announce] Block verified")
+					Msgf("[Announce] Block verified %d", recvMsg.BlockNum)
 			}
 		}()
 	}
@@ -124,11 +124,6 @@ func (consensus *Consensus) validateNewBlock(recvMsg *FBFTMessage) (*types.Block
 		Uint64("MsgBlockNum", recvMsg.BlockNum).
 		Hex("blockHash", recvMsg.BlockHash[:]).
 		Msg("[validateNewBlock] Prepared message and block added")
-
-	if consensus.BlockVerifier == nil {
-		consensus.getLogger().Debug().Msg("[validateNewBlock] consensus received message before init. Ignoring")
-		return nil, errors.New("nil block verifier")
-	}
 
 	if err := consensus.verifyBlock(&blockObj); err != nil {
 		consensus.getLogger().Error().Err(err).Msg("[validateNewBlock] Block verification failed")

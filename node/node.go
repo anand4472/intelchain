@@ -52,7 +52,6 @@ import (
 	"github.com/intelchain-itc/intelchain/node/worker"
 	"github.com/intelchain-itc/intelchain/p2p"
 	"github.com/intelchain-itc/intelchain/shard"
-	"github.com/intelchain-itc/intelchain/shard/committee"
 	"github.com/intelchain-itc/intelchain/staking/reward"
 	"github.com/intelchain-itc/intelchain/staking/slash"
 	staking "github.com/intelchain-itc/intelchain/staking/types"
@@ -82,7 +81,7 @@ type syncConfig struct {
 }
 
 type ISync interface {
-	UpdateBlockAndStatus(block *types.Block, bc core.BlockChain, verifyAllSig bool) error
+	UpdateBlockAndStatus(block *types.Block, bc core.BlockChain) error
 	AddLastMileBlock(block *types.Block)
 	GetActivePeerNumber() int
 	CreateSyncConfig(peers []p2p.Peer, shardID uint32, selfPeerID libp2p_peer.ID, waitForEachPeerToConnect bool) error
@@ -158,10 +157,6 @@ func (node *Node) SyncInstance() ISync {
 	return node.GetOrCreateSyncInstance(true)
 }
 
-func (node *Node) CurrentSyncInstance() bool {
-	return node.GetOrCreateSyncInstance(false) != nil
-}
-
 // GetOrCreateSyncInstance returns an instance of state sync, either legacy or staged
 // if initiate sets to true, it generates a new instance
 func (node *Node) GetOrCreateSyncInstance(initiate bool) ISync {
@@ -221,12 +216,12 @@ func (node *Node) tryBroadcast(tx *types.Transaction) {
 	msg := proto_node.ConstructTransactionListMessageAccount(types.Transactions{tx})
 
 	shardGroupID := nodeconfig.NewGroupIDByShardID(nodeconfig.ShardID(tx.ShardID()))
-	utils.Logger().Info().Str("tx_hash", tx.Hash().Hex()).Str("shardGroupID", string(shardGroupID)).Msg("tryBroadcast")
+	utils.Logger().Info().Str("shardGroupID", string(shardGroupID)).Msg("tryBroadcast")
 
 	for attempt := 0; attempt < NumTryBroadCast; attempt++ {
 		err := node.host.SendMessageToGroups([]nodeconfig.GroupID{shardGroupID}, p2p.ConstructMessage(msg))
 		if err != nil {
-			utils.Logger().Error().Str("tx_hash", tx.Hash().Hex()).Int("attempt", attempt).Msg("Error when trying to broadcast tx")
+			utils.Logger().Error().Int("attempt", attempt).Msg("Error when trying to broadcast tx")
 		} else {
 			break
 		}
@@ -239,12 +234,12 @@ func (node *Node) tryBroadcastStaking(stakingTx *staking.StakingTransaction) {
 	shardGroupID := nodeconfig.NewGroupIDByShardID(
 		nodeconfig.ShardID(shard.BeaconChainShardID),
 	) // broadcast to beacon chain
-	utils.Logger().Info().Str("tx_hash", stakingTx.Hash().Hex()).Str("shardGroupID", string(shardGroupID)).Msg("tryBroadcastStaking")
+	utils.Logger().Info().Str("shardGroupID", string(shardGroupID)).Msg("tryBroadcastStaking")
 
 	for attempt := 0; attempt < NumTryBroadCast; attempt++ {
 		if err := node.host.SendMessageToGroups([]nodeconfig.GroupID{shardGroupID},
 			p2p.ConstructMessage(msg)); err != nil {
-			utils.Logger().Error().Str("tx_hash", stakingTx.Hash().Hex()).Int("attempt", attempt).Msg("Error when trying to broadcast staking tx")
+			utils.Logger().Error().Int("attempt", attempt).Msg("Error when trying to broadcast staking tx")
 		} else {
 			break
 		}
@@ -267,40 +262,25 @@ func addPendingTransactions(registry *registry.Registry, newTxs types.Transactio
 		if tx.ShardID() != tx.ToShardID() {
 			if !acceptCx {
 				errs = append(errs, errors.WithMessage(errInvalidEpoch, "cross-shard tx not accepted yet"))
-				utils.Logger().Debug().Err(errors.WithMessage(errInvalidEpoch, "cross-shard tx not accepted yet")).
-					Str("tx_hash", tx.Hash().Hex()).
-					Msg("[addPendingTransactions] tx is not added to pending pool")
 				continue
 			}
 			if isBeforeHIP30 {
 				if tx.ToShardID() >= nxtShards {
 					errs = append(errs, errors.New("shards 2 and 3 are shutting down in the next epoch"))
-					utils.Logger().Debug().Err(errors.WithMessage(errInvalidEpoch, "shards 2 and 3 are shutting down in the next epoch")).
-						Str("tx_hash", tx.Hash().Hex()).
-						Msg("[addPendingTransactions] tx is not added to pending pool")
 					continue
 				}
 			}
 		}
 		if tx.IsEthCompatible() && !bc.Config().IsEthCompatible(bc.CurrentBlock().Epoch()) {
 			errs = append(errs, errors.WithMessage(errInvalidEpoch, "ethereum tx not accepted yet"))
-			utils.Logger().Debug().Err(errors.WithMessage(errInvalidEpoch, "ethereum tx not accepted yet")).
-				Str("tx_hash", tx.Hash().Hex()).
-				Msg("[addPendingTransactions] tx is not added to pending pool")
 			continue
 		}
 		if isBeforeHIP30 {
 			if bc.ShardID() >= nxtShards {
 				errs = append(errs, errors.New("shards 2 and 3 are shutting down in the next epoch"))
-				utils.Logger().Debug().Err(errors.WithMessage(errInvalidEpoch, "shards 2 and 3 are shutting down in the next epoch")).
-					Str("tx_hash", tx.Hash().Hex()).
-					Msg("[addPendingTransactions] tx is not added to pending pool")
 				continue
 			}
 		}
-		utils.Logger().Debug().
-			Str("tx_hash", tx.Hash().Hex()).
-			Msg("[addPendingTransactions] tx is added to the txs pool array")
 		poolTxs = append(poolTxs, tx)
 	}
 	errs = append(errs, registry.GetTxPool().AddRemotes(poolTxs)...)
@@ -320,19 +300,9 @@ func (node *Node) addPendingStakingTransactions(newStakingTxs staking.StakingTra
 		if node.Blockchain().Config().IsPreStaking(node.Blockchain().CurrentHeader().Epoch()) {
 			poolTxs := types.PoolTransactions{}
 			for _, tx := range newStakingTxs {
-				utils.Logger().Debug().
-					Str("tx_hash", tx.Hash().Hex()).
-					Msg("[addPendingStakingTransactions] tx is added to the txs pool array")
 				poolTxs = append(poolTxs, tx)
 			}
 			errs := node.TxPool.AddRemotes(poolTxs)
-			if len(errs) > 0 {
-				for _, err := range errs {
-					utils.Logger().Debug().
-						Err(err).
-						Msg("[addPendingStakingTransactions] AddRemotes failed")
-				}
-			}
 			pendingCount, queueCount := node.TxPool.Stats()
 			utils.Logger().Info().
 				Int("length of newStakingTxs", len(poolTxs)).
@@ -385,7 +355,7 @@ func (node *Node) AddPendingTransaction(newTx *types.Transaction) error {
 		var err error
 		for i := range errs {
 			if errs[i] != nil {
-				// utils.Logger().Info().Err(errs[i]).Msg("[AddPendingTransaction] Failed adding new transaction")
+				utils.Logger().Info().Err(errs[i]).Msg("[AddPendingTransaction] Failed adding new transaction")
 				err = errs[i]
 				break
 			}
@@ -529,10 +499,6 @@ func (node *Node) validateNodeMessage(ctx context.Context, payload []byte) (
 					utils.Logger().Debug().Uint64("receivedNum", block.NumberU64()).
 						Uint64("currentNum", curBeaconHeight).Msg("beacon block sync message rejected")
 					return nil, 0, errors.New("beacon block height smaller than current height beyond tolerance")
-				} else if block.NumberU64()-beaconBlockHeightTolerance > curBeaconHeight {
-					utils.Logger().Debug().Uint64("receivedNum", block.NumberU64()).
-						Uint64("currentNum", curBeaconHeight).Msg("beacon block sync message rejected")
-					return nil, 0, errors.Errorf("beacon block height too much higher than current height beyond tolerance, block %d, current %d, epoch %d , current %d", block.NumberU64(), curBeaconHeight, block.Epoch().Uint64(), curBeaconBlock.Epoch().Uint64())
 				} else if block.NumberU64() <= curBeaconHeight {
 					utils.Logger().Debug().Uint64("receivedNum", block.NumberU64()).
 						Uint64("currentNum", curBeaconHeight).Msg("beacon block sync message ignored")
@@ -580,7 +546,7 @@ func (node *Node) validateNodeMessage(ctx context.Context, payload []byte) (
 // validate shardID
 // validate public key size
 // verify message signature
-func validateShardBoundMessage(consensus *consensus.Consensus, nodeConfig *nodeconfig.ConfigType, payload []byte,
+func validateShardBoundMessage(consensus *consensus.Consensus, peer libp2p_peer.ID, nodeConfig *nodeconfig.ConfigType, payload []byte,
 ) (*msg_pb.Message, *bls.SerializedPublicKey, bool, error) {
 	var (
 		m msg_pb.Message
@@ -761,6 +727,7 @@ func (node *Node) StartPubSub() error {
 	// p2p consensus message handler function
 	type p2pHandlerConsensus func(
 		ctx context.Context,
+		peer libp2p_peer.ID,
 		msg *msg_pb.Message,
 		key *bls.SerializedPublicKey,
 	) error
@@ -774,6 +741,7 @@ func (node *Node) StartPubSub() error {
 
 	// interface pass to p2p message validator
 	type validated struct {
+		peerID         libp2p_peer.ID
 		consensusBound bool
 		handleC        p2pHandlerConsensus
 		handleCArg     *msg_pb.Message
@@ -831,7 +799,7 @@ func (node *Node) StartPubSub() error {
 
 					// validate consensus message
 					validMsg, senderPubKey, ignore, err := validateShardBoundMessage(
-						node.Consensus, node.NodeConfig, openBox[proto.MessageCategoryBytes:],
+						node.Consensus, peer, node.NodeConfig, openBox[proto.MessageCategoryBytes:],
 					)
 
 					if err != nil {
@@ -845,6 +813,7 @@ func (node *Node) StartPubSub() error {
 					}
 
 					msg.ValidatorData = validated{
+						peerID:         peer,
 						consensusBound: true,
 						handleC:        node.Consensus.HandleMessageUpdate,
 						handleCArg:     validMsg,
@@ -875,6 +844,7 @@ func (node *Node) StartPubSub() error {
 						}
 					}
 					msg.ValidatorData = validated{
+						peerID:         peer,
 						consensusBound: false,
 						handleE:        node.HandleNodeMessage,
 						handleEArg:     validMsg,
@@ -926,7 +896,7 @@ func (node *Node) StartPubSub() error {
 									errChan <- withError{err, nil}
 								}
 							} else {
-								if err := msg.handleC(ctx, msg.handleCArg, msg.senderPubKey); err != nil {
+								if err := msg.handleC(ctx, msg.peerID, msg.handleCArg, msg.senderPubKey); err != nil {
 									errChan <- withError{err, msg.senderPubKey}
 								}
 							}
@@ -1068,7 +1038,7 @@ func New(
 	if consensusObj == nil {
 		panic("consensusObj is nil")
 	}
-	// Get the node config that's created in the intelchain.go program.
+	// Get the node config that's created in the Intelchain.go program.
 	node.NodeConfig = nodeconfig.GetShardConfig(consensusObj.ShardID)
 	node.IntelchainConfig = intelchainconfig
 
@@ -1219,72 +1189,6 @@ func (node *Node) updateInitialRewardValues() {
 		initTotal = new(big.Int).Add(core.GetInitialFunds(i), initTotal)
 	}
 	reward.SetTotalInitialTokens(initTotal)
-}
-
-// InitConsensusWithValidators initialize shard state
-// from latest epoch and update committee pub
-// keys for consensus
-func (node *Node) InitConsensusWithValidators() (err error) {
-	if node.Consensus == nil {
-		utils.Logger().Error().
-			Msg("[InitConsensusWithValidators] consenus is nil; Cannot figure out shardID")
-		return errors.New(
-			"[InitConsensusWithValidators] consenus is nil; Cannot figure out shardID",
-		)
-	}
-	shardID := node.Consensus.ShardID
-	currentBlock := node.Blockchain().CurrentBlock()
-	blockNum := currentBlock.NumberU64()
-	node.Consensus.SetMode(consensus.Listening)
-	epoch := currentBlock.Epoch()
-	utils.Logger().Info().
-		Uint64("blockNum", blockNum).
-		Uint32("shardID", shardID).
-		Uint64("epoch", epoch.Uint64()).
-		Msg("[InitConsensusWithValidators] Try To Get PublicKeys")
-	shardState, err := committee.WithStakingEnabled.Compute(
-		epoch, node.Consensus.Blockchain(),
-	)
-	if err != nil {
-		utils.Logger().Err(err).
-			Uint64("blockNum", blockNum).
-			Uint32("shardID", shardID).
-			Uint64("epoch", epoch.Uint64()).
-			Msg("[InitConsensusWithValidators] Failed getting shard state")
-		return err
-	}
-	subComm, err := shardState.FindCommitteeByID(shardID)
-	if err != nil {
-		utils.Logger().Err(err).
-			Interface("shardState", shardState).
-			Msg("[InitConsensusWithValidators] Find CommitteeByID")
-		return err
-	}
-	pubKeys, err := subComm.BLSPublicKeys()
-	if err != nil {
-		utils.Logger().Error().
-			Uint32("shardID", shardID).
-			Uint64("blockNum", blockNum).
-			Msg("[InitConsensusWithValidators] PublicKeys is Empty, Cannot update public keys")
-		return errors.Wrapf(
-			err,
-			"[InitConsensusWithValidators] PublicKeys is Empty, Cannot update public keys",
-		)
-	}
-
-	for _, key := range pubKeys {
-		if node.Consensus.GetPublicKeys().Contains(key.Object) {
-			utils.Logger().Info().
-				Uint64("blockNum", blockNum).
-				Int("numPubKeys", len(pubKeys)).
-				Str("mode", node.Consensus.Mode().String()).
-				Msg("[InitConsensusWithValidators] Successfully updated public keys")
-			node.Consensus.UpdatePublicKeys(pubKeys, shard.Schedule.InstanceForEpoch(epoch).ExternalAllowlist())
-			node.Consensus.SetMode(consensus.Normal)
-			return nil
-		}
-	}
-	return nil
 }
 
 func (node *Node) initNodeConfiguration() (service.NodeConfig, chan p2p.Peer, error) {

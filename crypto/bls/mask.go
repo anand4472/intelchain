@@ -1,8 +1,8 @@
 package bls
 
 import (
-	lru "github.com/hashicorp/golang-lru"
 	"github.com/intelchain-itc/bls/ffi/go/bls"
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/pkg/errors"
 )
 

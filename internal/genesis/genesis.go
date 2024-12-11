@@ -10,7 +10,7 @@ import (
 	"github.com/intelchain-itc/intelchain/internal/utils"
 )
 
-const genesisString = "https://intelchain.network 'Fast & secure Consensus' 2024.06.01 $ITC"
+const genesisString = "https://intelchain.org Fast and Secure Blockchain:  $ITC"
 
 // DeployAccount is the account used in genesis
 type DeployAccount struct {

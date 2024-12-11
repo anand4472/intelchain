@@ -6,7 +6,7 @@ set -eu
 # And run the binary. Many codes are copied from prysm.sh (eth2 client).
 # Downloaded binaries is saved in staging/ directory
 # Use INTELCHAIN_RELEASE to specify a specific release version
-# Example: INTELCHAIN_RELEASE=v3.0.0 ./node.sh INTELCHAIN
+# Example: INTELCHAIN_RELEASE=v3.0.0 ./node.sh intelchain
 
 INTELCHAIN_SIGNING_KEY=539910B02B5BAC637F6615C9799ACE3A9B83DF60
 DOWNLOAD_URL=https://github.com/intelchain-itc/intelchain/releases/download
@@ -25,7 +25,7 @@ color() {
     printf '\033[%sm%s\033[0m\n' "$@"
 }
 
-# return the intelchain release version
+# return the INTELCHAIN release version
 get_version() {
     if [[ -n ${INTELCHAIN_RELEASE:-} ]]; then
         readonly reason="specified in \$INTELCHAIN_RELEASE"
@@ -164,7 +164,7 @@ if [ "$#" -lt 1 ]; then
 fi
 
 get_version
-color "37" "Latest intelchain release is: $intelchain_rel."
+color "37" "Latest Intelchain release is: $intelchain_rel."
 
 readonly wrapper_dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/staging/${intelchain_rel}"
 VALIDATOR="intelchain"

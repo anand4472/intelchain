@@ -114,7 +114,7 @@ func TestCompute(t *testing.T) {
 		computedRoster.TheirVotingPowerTotalPercentage,
 	).Equal(numeric.OneDec()) {
 		t.Errorf(
-			"Total voting power does not equal 1. intelchain voting power: %s, Staked voting power: %s",
+			"Total voting power does not equal 1. Intelchain voting power: %s, Staked voting power: %s",
 			computedRoster.OurVotingPowerTotalPercentage,
 			computedRoster.TheirVotingPowerTotalPercentage,
 		)

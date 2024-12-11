@@ -4,9 +4,11 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/trie"
 	"github.com/intelchain-itc/intelchain/block"
 	"github.com/intelchain-itc/intelchain/consensus/reward"
 	"github.com/intelchain-itc/intelchain/core/state"
+	"github.com/intelchain-itc/intelchain/core/state/snapshot"
 	"github.com/intelchain-itc/intelchain/core/types"
 	"github.com/intelchain-itc/intelchain/crypto/bls"
 	"github.com/intelchain-itc/intelchain/internal/params"
@@ -22,6 +24,9 @@ import (
 type ChainReader interface {
 	// Config retrieves the blockchain's chain configuration.
 	Config() *params.ChainConfig
+
+	// TrieDB returns trie database
+	TrieDB() *trie.Database
 
 	// TrieNode retrieves a blob of data associated with a trie node
 	// either from ephemeral in-memory cache, or from persistent storage.
@@ -61,6 +66,9 @@ type ChainReader interface {
 
 	// GetBlock retrieves a block from the database by hash and number.
 	GetBlock(hash common.Hash, number uint64) *types.Block
+
+	// Snapshots returns the blockchain snapshot tree.
+	Snapshots() *snapshot.Tree
 
 	// ReadShardState retrieves sharding state given the epoch number.
 	// This api reads the shard state cached or saved on the chaindb.

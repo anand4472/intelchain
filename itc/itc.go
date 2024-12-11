@@ -120,6 +120,7 @@ type NodeAPI interface {
 	GetConfig() commonRPC.Config
 	ShutDown()
 	GetLastSigningPower() (float64, error)
+	GetLastSigningPower2() (float64, error)
 }
 
 // New creates a new Intelchain object (including the

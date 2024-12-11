@@ -339,7 +339,7 @@ func (e *engineImpl) Finalize(
 		// is designed for staking decimals and not
 		// ONE balances so we use big.Int for this math
 		remainderOne := new(big.Int).Div(
-			remainder.Int, big.NewInt(denominations.Itc),
+			remainder.Int, big.NewInt(denominations.One),
 		)
 		// this goes directly to the balance (on shard 0, of course)
 		// because the reward mechanism isn't built to handle
@@ -456,6 +456,13 @@ func setElectionEpochAndMinFee(chain engine.ChainReader, header *block.Header, s
 		isElected[addr] = struct{}{}
 	}
 
+	if config.IsMaxRate(newShardState.Epoch) {
+		for _, addr := range chain.ValidatorCandidates() {
+			if _, err := availability.UpdateMaxCommissionFee(state, addr, minRate); err != nil {
+				return err
+			}
+		}
+	}
 	// due to a bug in the old implementation of the minimum fee,
 	// unelected validators did not have their fee updated even
 	// when the protocol required them to do so. here we fix it,

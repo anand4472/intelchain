@@ -61,8 +61,8 @@ var DefaultGPOConfig = intelchain.GasPriceOracleConfig{
 	Blocks:            20,
 	Transactions:      3,
 	Percentile:        60,
-	DefaultPrice:      100 * denominations.Ticks,  // 100 gwei
-	MaxPrice:          1000 * denominations.Ticks, // 1000 gwei
+	DefaultPrice:      100 * denominations.Nano,  // 100 gwei
+	MaxPrice:          1000 * denominations.Nano, // 1000 gwei
 	LowUsageThreshold: 50,
 	BlockGasLimit:     0, // TODO should we set default to 30M?
 }

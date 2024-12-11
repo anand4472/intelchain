@@ -21,11 +21,11 @@ import (
 )
 
 const (
-	defaultGasPrice    = denominations.Ticks
+	defaultGasPrice    = denominations.Nano
 	defaultFromAddress = "0x0000000000000000000000000000000000000000"
 )
 
-// PublicContractService provides an API to access intelchain's contract services.
+// PublicContractService provides an API to access Intelchain's contract services.
 // It offers only methods that operate on public data that is freely available to anyone.
 type PublicContractService struct {
 	itc     *itc.Intelchain

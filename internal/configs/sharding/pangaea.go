@@ -22,9 +22,9 @@ const (
 	pangaeaVdfDifficulty = 10000 // This takes about 20s to finish the vdf
 
 	// PangaeaHTTPPattern is the http pattern for pangaea.
-	PangaeaHTTPPattern = "https://api.s%d.os.hmny.io"
+	PangaeaHTTPPattern = "https://api.s%d.os.intelchain.network"
 	// PangaeaWSPattern is the websocket pattern for pangaea.
-	PangaeaWSPattern = "wss://ws.s%d.os.hmny.io"
+	PangaeaWSPattern = "wss://ws.s%d.os.intelchain.network"
 )
 
 func (ps pangaeaSchedule) InstanceForEpoch(epoch *big.Int) Instance {
