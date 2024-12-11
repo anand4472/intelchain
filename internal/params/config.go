@@ -19,13 +19,13 @@ var (
 	AllProtocolChangesChainID = big.NewInt(100) // not a real network
 
 	// EthMainnetShard0ChainID to be reserved unique chain ID for eth compatible chains.
-	EthMainnetShard0ChainID            = big.NewInt(1666600000)
-	EthTestnetShard0ChainID            = big.NewInt(1666700000)
-	EthPangaeaShard0ChainID            = big.NewInt(1666800000)
-	EthPartnerShard0ChainID            = big.NewInt(1666900000)
-	EthStressnetShard0ChainID          = big.NewInt(1667000000)
-	EthTestShard0ChainID               = big.NewInt(1667100000) // not a real network
-	EthAllProtocolChangesShard0ChainID = big.NewInt(1667200000) // not a real network
+	EthMainnetShard0ChainID            = big.NewInt(1888600000)
+	EthTestnetShard0ChainID            = big.NewInt(1888700000)
+	EthPangaeaShard0ChainID            = big.NewInt(1888800000)
+	EthPartnerShard0ChainID            = big.NewInt(1888900000)
+	EthStressnetShard0ChainID          = big.NewInt(1887000000)
+	EthTestShard0ChainID               = big.NewInt(1887100000) // not a real network
+	EthAllProtocolChangesShard0ChainID = big.NewInt(1887200000) // not a real network
 )
 
 // EpochTBD is a large, “not anytime soon” epoch.  It used as a placeholder
